@@ -23,6 +23,10 @@ public class AnimEvents : MonoBehaviour
     {
         SceneManager.LoadScene("Test");
     }
+    public void L0_0()
+    {
+        SceneManager.LoadScene("L0_0");
+    }
 
-    
+
 }

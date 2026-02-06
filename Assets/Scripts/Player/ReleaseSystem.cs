@@ -61,7 +61,7 @@ public class ReleaseSystem : MonoBehaviour
         }
     }
 
-    void ReleaseEnergy()
+    public void ReleaseEnergy()
     {
         if (eclipseSystem.CurrentLayer <= 0)
         {
@@ -99,6 +99,9 @@ public class ReleaseSystem : MonoBehaviour
             BaseEnemy baseEnemy = enemyObj.GetComponent<BaseEnemy>();
             if (baseEnemy != null)
             {
+
+
+
                 baseEnemy.TakeDamage(totalDamage);
                 enemiesDamaged++;
                 enemyTypes.Add("BaseEnemy");
