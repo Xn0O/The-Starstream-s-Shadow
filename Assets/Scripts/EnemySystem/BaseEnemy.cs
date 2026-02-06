@@ -242,7 +242,7 @@ public abstract class BaseEnemy : MonoBehaviour
         OnDeath();
 
         // 销毁对象
-        Destroy(gameObject, 1.5f); // 给足够时间播放动画
+        Destroy(gameObject, 0.5f); // 给足够时间播放动画
     }
 
     protected virtual void PlayDeathEffects()
