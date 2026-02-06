@@ -1,40 +1,40 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class MoleBoss : BaseEnemy
 {
-    [Header("µØÊó½×¶ÎÉèÖÃ")]
-    public float emergeTime = 3f;        // ³öÏÖÊ±¼ä£¨¿É¹¥»÷£©
-    public float hideTime = 4f;          // Òş²ØÊ±¼ä£¨ÎŞµĞ£©
-    public float warningTime = 1f;       // ³öÏÖÇ°¾¯¸æÊ±¼ä
+    [Header("åœ°é¼ é˜¶æ®µè®¾ç½®")]
+    public float emergeTime = 3f;        // å‡ºç°æ—¶é—´ï¼ˆå¯æ”»å‡»ï¼‰
+    public float hideTime = 4f;          // éšè—æ—¶é—´ï¼ˆæ— æ•Œï¼‰
+    public float warningTime = 1f;       // å‡ºç°å‰è­¦å‘Šæ—¶é—´
 
-    [Header("GameObjectÇĞ»»")]
-    public GameObject hideObject;        // Òş²Ø×´Ì¬µÄÎïÌå
-    public GameObject warningObject;     // ¾¯¸æ×´Ì¬µÄÎïÌå
-    public GameObject emergeObject;      // ³öÏÖ×´Ì¬µÄÎïÌå
+    [Header("GameObjectåˆ‡æ¢")]
+    public GameObject hideObject;        // éšè—çŠ¶æ€çš„ç‰©ä½“
+    public GameObject warningObject;     // è­¦å‘ŠçŠ¶æ€çš„ç‰©ä½“
+    public GameObject emergeObject;      // å‡ºç°çŠ¶æ€çš„ç‰©ä½“
 
-    [Header("Ğ¡¹ÖÉú³ÉÉèÖÃ")]
-    public GameObject minionPrefab;      // ÕÙ»½µÄĞ¡¹ÖÔ¤ÖÆÌå
-    public float minionSpawnInterval = 1f; // Éú³ÉĞ¡¹ÖµÄÊ±¼ä¼ä¸ô
-    public int maxMinions = 5;           // ×î´óÍ¬Ê±´æÔÚµÄĞ¡¹Ö
-    public Vector2[] spawnPositions;     // ¿ÉÑ¡£º¹Ì¶¨Éú³ÉÎ»ÖÃ£¬Èç¹ûÎª¿ÕÔòËæ»úÉú³É
+    [Header("å°æ€ªç”Ÿæˆè®¾ç½®")]
+    public GameObject minionPrefab;      // å¬å”¤çš„å°æ€ªé¢„åˆ¶ä½“
+    public float minionSpawnInterval = 1f; // ç”Ÿæˆå°æ€ªçš„æ—¶é—´é—´éš”
+    public int maxMinions = 5;           // æœ€å¤§åŒæ—¶å­˜åœ¨çš„å°æ€ª
+    public Vector2[] spawnPositions;     // å¯é€‰ï¼šå›ºå®šç”Ÿæˆä½ç½®ï¼Œå¦‚æœä¸ºç©ºåˆ™éšæœºç”Ÿæˆ
 
-    [Header("Åö×²ÉËº¦ÉèÖÃ")]
-    public float collisionDamageInterval = 0.5f; // Åö×²ÉËº¦¼ä¸ô
-    private float collisionTimer = 0f;   // Åö×²¼ÆÊ±Æ÷
+    [Header("ç¢°æ’ä¼¤å®³è®¾ç½®")]
+    public float collisionDamageInterval = 0.5f; // ç¢°æ’ä¼¤å®³é—´éš”
+    private float collisionTimer = 0f;   // ç¢°æ’è®¡æ—¶å™¨
 
-    [Header("Boss UIÉèÖÃ")]
-    public string bossName = "µØÊóÍõ";    // BossÃû³Æ£¨ÏÔÊ¾ÔÚUIÉÏ£©
-    public Color bossUIColor = Color.yellow; // Boss UIÑÕÉ«
+    [Header("Boss UIè®¾ç½®")]
+    public string bossName = "åœ°é¼ ç‹";    // Bossåç§°ï¼ˆæ˜¾ç¤ºåœ¨UIä¸Šï¼‰
+    public Color bossUIColor = Color.yellow; // Boss UIé¢œè‰²
 
-    // ×´Ì¬Ïà¹Ø
+    // çŠ¶æ€ç›¸å…³
     private enum MoleState { Hidden, Warning, Emerged }
     private MoleState currentState = MoleState.Hidden;
     private Coroutine stateCoroutine;
     private Coroutine spawnCoroutine;
 
-    // Ğ¡¹Ö¹ÜÀí
+    // å°æ€ªç®¡ç†
     private List<GameObject> activeMinionList = new List<GameObject>();
 
     protected override void Start()
@@ -47,7 +47,7 @@ public class MoleBoss : BaseEnemy
 
     protected override void UpdateEnemy()
     {
-        // ¸üĞÂÅö×²¼ÆÊ±Æ÷
+        // æ›´æ–°ç¢°æ’è®¡æ—¶å™¨
         if (collisionTimer > 0)
         {
             collisionTimer -= Time.deltaTime;
@@ -64,18 +64,18 @@ public class MoleBoss : BaseEnemy
     {
         while (isAlive)
         {
-            // 1. Òş²Ø×´Ì¬
+            // 1. éšè—çŠ¶æ€
             ChangeState(MoleState.Hidden);
-            StopSpawning(); // Í£Ö¹Éú³ÉĞ¡¹Ö
+            StopSpawning(); // åœæ­¢ç”Ÿæˆå°æ€ª
             yield return new WaitForSeconds(hideTime);
 
-            // 2. ¾¯¸æ×´Ì¬
+            // 2. è­¦å‘ŠçŠ¶æ€
             ChangeState(MoleState.Warning);
             yield return new WaitForSeconds(warningTime);
 
-            // 3. ³öÏÖ×´Ì¬
+            // 3. å‡ºç°çŠ¶æ€
             ChangeState(MoleState.Emerged);
-            StartSpawning(); // ¿ªÊ¼Éú³ÉĞ¡¹Ö
+            StartSpawning(); // å¼€å§‹ç”Ÿæˆå°æ€ª
             yield return new WaitForSeconds(emergeTime);
         }
     }
@@ -94,7 +94,7 @@ public class MoleBoss : BaseEnemy
         if (emergeObject) emergeObject.SetActive(currentState == MoleState.Emerged);
     }
 
-    #region Ğ¡¹ÖÉú³ÉÏµÍ³£¨¼ò»¯°æ£©
+    #region å°æ€ªç”Ÿæˆç³»ç»Ÿï¼ˆç®€åŒ–ç‰ˆï¼‰
 
     void StartSpawning()
     {
@@ -126,18 +126,18 @@ public class MoleBoss : BaseEnemy
 
     void SpawnMinion()
     {
-        // Éú³ÉÎ»ÖÃ
+        // ç”Ÿæˆä½ç½®
         Vector2 spawnPos;
 
         if (spawnPositions != null && spawnPositions.Length > 0)
         {
-            // ´ÓÔ¤ÉèÎ»ÖÃÖĞËæ»úÑ¡ÔñÒ»¸ö
+            // ä»é¢„è®¾ä½ç½®ä¸­éšæœºé€‰æ‹©ä¸€ä¸ª
             int randomIndex = Random.Range(0, spawnPositions.Length);
             spawnPos = (Vector2)transform.position + spawnPositions[randomIndex];
         }
         else
         {
-            // Ëæ»úÎ»ÖÃ£¨ÒÔBossÎªÖĞĞÄ£¬°ë¾¶2-5¸öµ¥Î»£©
+            // éšæœºä½ç½®ï¼ˆä»¥Bossä¸ºä¸­å¿ƒï¼ŒåŠå¾„2-5ä¸ªå•ä½ï¼‰
             float radius = Random.Range(2f, 5f);
             float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
             spawnPos = (Vector2)transform.position + new Vector2(
@@ -149,21 +149,21 @@ public class MoleBoss : BaseEnemy
         GameObject minion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
         activeMinionList.Add(minion);
 
-        // ÉèÖÃĞ¡¹ÖËÀÍö»Øµ÷
+        // è®¾ç½®å°æ€ªæ­»äº¡å›è°ƒ
         BaseEnemy minionEnemy = minion.GetComponent<BaseEnemy>();
         if (minionEnemy != null)
         {
-            // ¿ÉÒÔÔÚÕâÀï³õÊ¼»¯Ğ¡¹Ö
+            // å¯ä»¥åœ¨è¿™é‡Œåˆå§‹åŒ–å°æ€ª
             minion.tag = "Enemy";
 
-            // ¼àÌıĞ¡¹ÖËÀÍöÊÂ¼ş£¨Èç¹ûÓĞµÄ»°£©
+            // ç›‘å¬å°æ€ªæ­»äº¡äº‹ä»¶ï¼ˆå¦‚æœæœ‰çš„è¯ï¼‰
             // minionEnemy.OnDeathEvent += OnMinionDied;
         }
 
-        Debug.Log($"Éú³ÉĞ¡¹Ö£¬µ±Ç°Î»ÖÃĞ¡¹ÖÊıÁ¿: {activeMinionList.Count}");
+        Debug.Log($"ç”Ÿæˆå°æ€ªï¼Œå½“å‰ä½ç½®å°æ€ªæ•°é‡: {activeMinionList.Count}");
     }
 
-    // Ğ¡¹ÖËÀÍöÊ±µ÷ÓÃ
+    // å°æ€ªæ­»äº¡æ—¶è°ƒç”¨
     public void OnMinionDied(GameObject minion)
     {
         if (activeMinionList.Contains(minion))
@@ -174,7 +174,7 @@ public class MoleBoss : BaseEnemy
 
     #endregion
 
-    #region Åö×²ÉËº¦ÏµÍ³£¨Ìí¼Ó¼ä¸ô£©
+    #region ç¢°æ’ä¼¤å®³ç³»ç»Ÿï¼ˆæ·»åŠ é—´éš”ï¼‰
 
     protected override void HandlePlayerCollision(GameObject player)
     {
@@ -184,19 +184,19 @@ public class MoleBoss : BaseEnemy
         PlayerController playerCtrl = player.GetComponent<PlayerController>();
         if (playerCtrl)
         {
-            // Ôì³ÉÉËº¦
+            // é€ æˆä¼¤å®³
             playerCtrl.TakeDamage(collisionDamage);
             Eclipce.AddLayer(layerAddAmount);
-            // ÖØÖÃ¼ÆÊ±Æ÷
+            // é‡ç½®è®¡æ—¶å™¨
             collisionTimer = collisionDamageInterval;
 
-            Debug.Log($"¶ÔÍæ¼ÒÔì³É {collisionDamage} ÉËº¦£¬ÏÂ´ÎÉËº¦ÔÚ {collisionDamageInterval} Ãëºó");
+            Debug.Log($"å¯¹ç©å®¶é€ æˆ {collisionDamage} ä¼¤å®³ï¼Œä¸‹æ¬¡ä¼¤å®³åœ¨ {collisionDamageInterval} ç§’å");
         }
     }
 
     #endregion
 
-    #region ÖØĞ´BaseEnemy·½·¨
+    #region é‡å†™BaseEnemyæ–¹æ³•
 
     public override void TakeDamage(float damage)
     {
@@ -210,7 +210,7 @@ public class MoleBoss : BaseEnemy
         base.TakeDamage(damage);
         UpdateBossUI();
 
-        // ÊÜÉËºó¿ÉÄÜÌáÇ°Òş²Ø
+        // å—ä¼¤åå¯èƒ½æå‰éšè—
         if (isAlive && Random.value < 0.3f)
         {
             StartCoroutine(EarlyHide());
@@ -219,7 +219,7 @@ public class MoleBoss : BaseEnemy
 
     IEnumerator EarlyHide()
     {
-        StopSpawning(); // Í£Ö¹Éú³ÉĞ¡¹Ö
+        StopSpawning(); // åœæ­¢ç”Ÿæˆå°æ€ª
         ChangeState(MoleState.Hidden);
         yield return new WaitForSeconds(hideTime);
         StartStateCycle();
@@ -232,19 +232,19 @@ public class MoleBoss : BaseEnemy
         if (stateCoroutine != null)
             StopCoroutine(stateCoroutine);
 
-        StopSpawning(); // Í£Ö¹Éú³ÉĞ¡¹Ö
+        StopSpawning(); // åœæ­¢ç”Ÿæˆå°æ€ª
         HideBossUI();
         ClearMinions();
     }
 
     protected override void OnStateChanged(EnemyState newState)
     {
-        // ¼òµ¥ÊµÏÖ
+        // ç®€å•å®ç°
     }
 
     #endregion
 
-    #region Boss UI¹ÜÀí
+    #region Boss UIç®¡ç†
 
     void ShowBossUI()
     {
@@ -266,7 +266,7 @@ public class MoleBoss : BaseEnemy
 
     #endregion
 
-    #region Ğ¡¹ÖÇåÀí
+    #region å°æ€ªæ¸…ç†
 
     void ClearMinions()
     {
@@ -280,11 +280,11 @@ public class MoleBoss : BaseEnemy
 
     #endregion
 
-    #region µ÷ÊÔºÍ±à¼­
+    #region è°ƒè¯•å’Œç¼–è¾‘
 
     void OnDrawGizmosSelected()
     {
-        // »æÖÆÉú³ÉÎ»ÖÃ
+        // ç»˜åˆ¶ç”Ÿæˆä½ç½®
         if (spawnPositions != null)
         {
             Gizmos.color = Color.green;
@@ -296,14 +296,14 @@ public class MoleBoss : BaseEnemy
             }
         }
 
-        // »æÖÆÉú³ÉÇøÓò£¨Èç¹ûÊ¹ÓÃËæ»úÉú³É£©
+        // ç»˜åˆ¶ç”ŸæˆåŒºåŸŸï¼ˆå¦‚æœä½¿ç”¨éšæœºç”Ÿæˆï¼‰
         if (spawnPositions == null || spawnPositions.Length == 0)
         {
             Gizmos.color = new Color(0, 1, 0, 0.2f);
             Gizmos.DrawWireSphere(transform.position, 3f);
         }
 
-        // ×´Ì¬Ö¸Ê¾
+        // çŠ¶æ€æŒ‡ç¤º
         Gizmos.color = GetStateColor();
         Gizmos.DrawWireSphere(transform.position + Vector3.up * 2f, 0.5f);
     }

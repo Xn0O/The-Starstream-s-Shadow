@@ -155,7 +155,9 @@ public abstract class BaseEnemy : MonoBehaviour
         UIManager ui = FindObjectOfType<UIManager>();
         if (ui)
         {
-            ui.ShowDamageText(transform.position, Mathf.RoundToInt(damage), GetDamageColor());
+            // 【修改点1】替换为玩家造成伤害专用方法，触发玩家造成伤害统计
+            // 保留原有的伤害取整和颜色逻辑，仅改方法名
+            ui.ShowPlayerDealDamageText(transform.position, Mathf.RoundToInt(damage), GetDamageColor());
         }
     }
 
@@ -218,8 +220,16 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        if (!isAlive) return; // 防止重复调用死亡逻辑，避免多次统计击杀
         isAlive = false;
         canTakeDamage = false;
+
+        // 【修改点2】添加击杀统计：敌人死亡时通知UI累计击杀数
+        UIManager ui = FindObjectOfType<UIManager>();
+        if (ui != null)
+        {
+            //ui.AddKillCount(); // 调用UI的击杀统计方法
+        }
 
         // 禁用碰撞和物理
         if (col) col.enabled = false;

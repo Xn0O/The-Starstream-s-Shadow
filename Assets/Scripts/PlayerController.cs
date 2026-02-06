@@ -25,13 +25,20 @@ public class PlayerController : MonoBehaviour
     [Header("受伤震动设置")]
     public float damageShakeDuration = 0.15f;
     public float damageShakeMagnitude = 0.1f;
+
     [Header("大伤害震动设置")]
     public float heavyDamageShakeDuration = 0.25f;
     public float heavyDamageShakeMagnitude = 0.2f;
     public float heavyDamageThreshold = 10f; // 触发大伤害震动的伤害阈值
 
+    [Header("受击特效")]
+    public GameObject hitEffectPrefab; // 受击特效预制体
+    public Vector3 hitEffectOffset = new Vector3(0, 0, 0); // 特效位置偏移
+    public Transform hitEffectSpawnPoint; // 特效生成点（可选，如果不设置则使用玩家位置）
+
     private Rigidbody2D rb;
     private ScreenEffectManager screenEffectManager;
+    private GameObject currentHitEffect; // 当前正在播放的受击特效
 
     // 记录最后一次有效的方向
     public enum Direction { None, Up, Down, Left, Right }
@@ -195,15 +202,56 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log($"玩家受到伤害: {damage}, 当前生命: {currentHealth}");
 
-        // 调用UI显示伤害数字
+        // 调用UI显示伤害数字并统计玩家受伤害【仅修改此行方法名，适配统计】
         UIManager ui = FindObjectOfType<UIManager>();
         if (ui)
         {
-            ui.ShowDamageText(transform.position, damage, Color.red);
+            ui.ShowPlayerTakenDamageText(transform.position, damage, Color.red);
         }
 
         // 添加受伤震动反馈
         ApplyDamageShake(damage);
+
+        // 如果伤害值达到大伤害阈值，播放受击特效
+        if (damage >= heavyDamageThreshold)
+        {
+            PlayHitEffect();
+        }
+    }
+
+    // 播放受击特效（简化版）
+    private void PlayHitEffect()
+    {
+        // 如果已经有一个受击特效在播放，先销毁它
+        if (currentHitEffect != null)
+        {
+            Destroy(currentHitEffect);
+        }
+
+        // 检查是否有受击特效预制体
+        if (hitEffectPrefab == null)
+        {
+            Debug.LogWarning("受击特效预制体未分配，请在Inspector中分配Hit Effect Prefab");
+            return;
+        }
+
+        // 确定特效生成位置
+        Vector3 spawnPosition;
+        if (hitEffectSpawnPoint != null)
+        {
+            // 使用指定的生成点
+            spawnPosition = hitEffectSpawnPoint.position + hitEffectOffset;
+        }
+        else
+        {
+            // 使用玩家位置加上偏移
+            spawnPosition = transform.position + hitEffectOffset;
+        }
+
+        // 实例化受击特效（特效会自动销毁）
+        currentHitEffect = Instantiate(hitEffectPrefab, spawnPosition, Quaternion.identity);
+
+        Debug.Log("播放受击特效");
     }
 
     // 治疗
@@ -213,7 +261,7 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log($"玩家治疗: {amount}, 当前生命: {currentHealth}");
 
-        // 调用UI显示治疗数字
+        // 调用UI显示治疗数字【此方法无需修改，UIManager已做兼容】
         UIManager ui = FindObjectOfType<UIManager>();
         if (ui)
         {
@@ -305,5 +353,17 @@ public class PlayerController : MonoBehaviour
     public void ResetToInitialDirection()
     {
         SetDirection(initialDirection);
+    }
+
+    [ContextMenu("测试大伤害受击特效")]
+    public void TestHeavyDamageEffect()
+    {
+        TakeDamage(heavyDamageThreshold + 5f);
+    }
+
+    [ContextMenu("测试小伤害")]
+    public void TestLightDamage()
+    {
+        TakeDamage(heavyDamageThreshold - 5f);
     }
 }
