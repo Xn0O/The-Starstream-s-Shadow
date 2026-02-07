@@ -17,6 +17,15 @@ public class ShadowEnemy : BaseEnemy
     [Header("伤害设置")]
     public float CollisionDamgeTime = 0.25f; // 碰撞伤害间隔时间
 
+    [Header("击退设置")]
+    public float knockbackForce = 5f;      // 被玩家击退的力
+    public float knockbackDuration = 0.2f; // 击退持续时间
+    public float stunDuration = 0.1f;      // 击退后的硬直时间
+    private bool isKnockedBack = false;    // 是否正在被击退
+    private float knockbackTimer = 0f;     // 击退计时器
+    private Vector2 knockbackDirection;    // 击退方向
+    private EnemyState stateBeforeKnockback; // 击退前的状态
+
     [Header("旋转设置")]
     public float rotationSpeed = 10f;
     public bool useSmoothRotation = true;
@@ -56,6 +65,9 @@ public class ShadowEnemy : BaseEnemy
     {
         if (!isAlive) return;
 
+        // 更新击退效果
+        UpdateKnockback();
+
         stateTimer += Time.deltaTime;
 
         // 更新伤害间隔计时
@@ -65,7 +77,31 @@ public class ShadowEnemy : BaseEnemy
         CheckPlayerInRange();
 
         UpdateState();
-        UpdateRotation();
+
+        // 只有在非击退状态才更新旋转
+        if (!isKnockedBack)
+        {
+            UpdateRotation();
+        }
+    }
+
+    /// <summary>
+    /// 更新击退效果
+    /// </summary>
+    void UpdateKnockback()
+    {
+        if (isKnockedBack)
+        {
+            knockbackTimer -= Time.deltaTime;
+
+            if (knockbackTimer <= 0)
+            {
+                // 击退结束
+                isKnockedBack = false;
+                rb.velocity = Vector2.zero;
+                Debug.Log("击退结束");
+            }
+        }
     }
 
     /// <summary>
@@ -86,6 +122,9 @@ public class ShadowEnemy : BaseEnemy
 
     void UpdateState()
     {
+        // 如果正在被击退，暂停状态更新
+        if (isKnockedBack) return;
+
         switch (currentState)
         {
             case EnemyState.Idle:
@@ -112,6 +151,15 @@ public class ShadowEnemy : BaseEnemy
 
     void ChangeState(EnemyState newState)
     {
+        // 如果正在被击退，不允许切换状态
+        if (isKnockedBack) return;
+
+        // 如果是切换到攻击状态，重置一些参数
+        if (newState == EnemyState.Attack)
+        {
+            chargeDirection = currentMoveDirection;
+        }
+
         currentState = newState;
         stateTimer = 0f;
         Debug.Log($"状态切换: {newState}");
@@ -172,9 +220,13 @@ public class ShadowEnemy : BaseEnemy
 
     void UpdateAttackState()
     {
-        // 向玩家冲刺
-        rb.velocity = chargeDirection * chargeSpeed;
-        currentMoveDirection = chargeDirection;
+        // 只有在非击退状态才执行攻击移动
+        if (!isKnockedBack)
+        {
+            // 向玩家冲刺
+            rb.velocity = chargeDirection * chargeSpeed;
+            currentMoveDirection = chargeDirection;
+        }
 
         if (stateTimer >= attackDuration)
         {
@@ -248,11 +300,86 @@ public class ShadowEnemy : BaseEnemy
     {
         base.TakeDamage(damage);
 
+        // 受伤时触发击退效果
+        if (isAlive && PlayerTransform != null)
+        {
+            // 保存击退前的状态
+            stateBeforeKnockback = currentState;
+
+            // 计算击退方向
+            Vector2 knockbackDir = (transform.position - PlayerTransform.position).normalized;
+            ApplyKnockback(knockbackDir);
+        }
+
         // 受伤后进入追逐状态
         if (isAlive && PlayerTransform != null)
         {
             ChangeState(EnemyState.Chase);
         }
+    }
+
+    /// <summary>
+    /// 应用击退效果 - 修复版本
+    /// </summary>
+    public void ApplyKnockback(Vector2 direction)
+    {
+        if (!isAlive || isKnockedBack) return;
+
+        // 设置击退状态
+        isKnockedBack = true;
+        knockbackTimer = knockbackDuration;
+        knockbackDirection = direction.normalized;
+
+        // 保存当前状态（用于击退后恢复）
+        stateBeforeKnockback = currentState;
+
+        // 关键：击退时立即停止所有状态相关的移动
+        rb.velocity = Vector2.zero;
+
+        // 应用击退力
+        rb.velocity = knockbackDirection * knockbackForce;
+
+        Debug.Log($"击退方向: {knockbackDirection}, 力度: {knockbackForce}, 当前状态: {currentState}");
+
+        // 保存当前状态，击退结束后恢复
+        StartCoroutine(KnockbackRecoveryRoutine());
+    }
+
+    /// <summary>
+    /// 击退恢复协程 - 修复版本
+    /// </summary>
+    IEnumerator KnockbackRecoveryRoutine()
+    {
+        // 等待击退持续时间
+        yield return new WaitForSeconds(knockbackDuration);
+
+        // 停止运动
+        rb.velocity = Vector2.zero;
+
+        // 短暂硬直
+        yield return new WaitForSeconds(stunDuration);
+
+        // 恢复移动
+        isKnockedBack = false;
+
+        // 关键修复：击退后应该进入冷却状态，而不是恢复攻击
+        // 如果击退前是攻击状态，击退后应该进入冷却
+        if (stateBeforeKnockback == EnemyState.Attack)
+        {
+            ChangeState(EnemyState.Cooldown);
+        }
+        // 如果击退前是追逐状态，重新开始追逐
+        else if (stateBeforeKnockback == EnemyState.Chase && isPlayerInRange)
+        {
+            ChangeState(EnemyState.Chase);
+        }
+        // 其他状态回到巡逻
+        else
+        {
+            ChangeState(EnemyState.Patrol);
+        }
+
+        Debug.Log($"击退恢复，从{stateBeforeKnockback}切换到{currentState}");
     }
 
     protected override void HandlePlayerCollision(GameObject player)
@@ -299,8 +426,12 @@ public class ShadowEnemy : BaseEnemy
 
         Debug.Log($"执行攻击伤害: {collisionDamage}");
 
-        // 攻击后进入冷却
-        ChangeState(EnemyState.Cooldown);
+        // 攻击时受到反作用力（怪物撞退）
+        Vector2 playerToEnemy = (transform.position - player.transform.position).normalized;
+        ApplyKnockback(playerToEnemy * 1.2f); // 攻击时的击退
+
+        // 关键修复：攻击后不应该立即进入冷却，因为击退协程会处理
+        // 击退结束后会自动进入冷却状态
     }
 
     /// <summary>
@@ -323,6 +454,10 @@ public class ShadowEnemy : BaseEnemy
 
             // 触发伤害间隔
             TriggerDamageCooldown();
+
+            // 怪物受到轻微反作用力
+            Vector2 playerToEnemy = (transform.position - player.transform.position).normalized;
+            ApplyKnockback(playerToEnemy * 0.8f); // 接触伤害的击退
 
             Debug.Log($"接触伤害: {damage}, 下次伤害在 {CollisionDamgeTime} 秒后");
         }
@@ -362,6 +497,10 @@ public class ShadowEnemy : BaseEnemy
         // 停止所有运动
         rb.velocity = Vector2.zero;
         currentMoveDirection = Vector2.zero;
+
+        // 死亡时取消所有击退效果
+        isKnockedBack = false;
+        StopAllCoroutines();
 
         // 缩放消失动画
         StartCoroutine(ScaleOutAnimation());
@@ -414,6 +553,14 @@ public class ShadowEnemy : BaseEnemy
         {
             Gizmos.color = new Color(1f, 0.5f, 0f, 0.7f); // 半透明橙色
             Gizmos.DrawWireSphere(transform.position + Vector3.up * 2f, 0.5f);
+        }
+
+        // 击退状态指示
+        if (isKnockedBack)
+        {
+            Gizmos.color = new Color(1f, 0f, 1f, 0.8f); // 紫色表示击退
+            Gizmos.DrawWireSphere(transform.position + Vector3.up * 2.5f, 0.4f);
+            Gizmos.DrawLine(transform.position, transform.position + (Vector3)knockbackDirection * 3f);
         }
     }
 
