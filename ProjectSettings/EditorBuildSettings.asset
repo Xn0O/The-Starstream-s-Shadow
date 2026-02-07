@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Test.unity
     guid: b7783c5e877861740ba825562190710a
+  - enabled: 1
+    path: Assets/Scenes/Talk.unity
+    guid: c466c571cfb18554dbd5dc36821f1065
+  - enabled: 1
+    path: Assets/Scenes/BOSS1.unity
+    guid: 82f0c2bc6bd10804db401e41cfdd83f9
+  - enabled: 1
+    path: Assets/Scenes/BOSS2.unity
+    guid: 52ca9c55a50cea3498ef6e2e84ba4d84
   m_configObjects: {}

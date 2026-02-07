@@ -5020,8 +5020,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
-  layerAddAmount: 4
-  collisionDamage: 7
+  layerAddAmount: 7
+  collisionDamage: 5
   mainSprite: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hitAnimationPrefab: {fileID: 4729282326496561589, guid: 216cb05e43137b14b8b9a989060a801c, type: 3}

@@ -27,6 +27,17 @@ public class AnimEvents : MonoBehaviour
     {
         SceneManager.LoadScene("L0_0");
     }
-
+    public void Talk()
+    {
+        SceneManager.LoadScene("Talk");
+    }
+    public void BOSS1()
+    {
+        SceneManager.LoadScene("BOSS1");
+    }
+    public void BOSS2()
+    {
+        SceneManager.LoadScene("BOSS2");
+    }
 
 }
