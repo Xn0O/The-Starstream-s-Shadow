@@ -23,6 +23,11 @@ public class RushBoss : BaseEnemy
     [SerializeField] private GameObject windupIndicator;      // 蓄力指示器（粗线）
     [SerializeField] private float indicatorLength = 5f;      // 指示器长度
 
+    [Header("反弹设置")]
+    [SerializeField] private float bounceSpeedMultiplier = 0.3f;    // 反弹速度倍率
+    [SerializeField] private float bounceDuration = 0.2f;          // 反弹持续时间
+    [SerializeField] private bool enableBounce = true;            // 是否启用反弹
+
     [Header("视觉模型")]
     [SerializeField] private GameObject idleModel;            // 呆在原地模型
     [SerializeField] private GameObject windupModel;         // 蓄力模型
@@ -549,29 +554,6 @@ public class RushBoss : BaseEnemy
 
     #endregion
 
-    
-
-    #region 视觉模型切换
-
-    private void SwitchModel(GameObject targetModel)
-    {
-        // 先隐藏所有模型
-        HideAllModels();
-
-        // 显示目标模型
-        if (targetModel != null)
-            targetModel.SetActive(true);
-    }
-
-    private void HideAllModels()
-    {
-        if (idleModel) idleModel.SetActive(false);
-        if (windupModel) windupModel.SetActive(false);
-        if (dashModel) dashModel.SetActive(false);
-    }
-
-    #endregion
-
     #region 碰撞检测和物理反应处理
 
     protected override void OnCollisionEnter2D(Collision2D collision)
@@ -589,6 +571,17 @@ public class RushBoss : BaseEnemy
             {
                 rb.velocity = Vector2.zero;
             }
+
+            // 新增：冲撞到玩家后反弹
+            else if (currentState == BossState.Dashing)
+            {
+                HandleBossCollisionWithPlayer(collision);
+            }
+        }
+        // 新增：冲撞到墙壁或其他障碍物也反弹
+        else if (currentState == BossState.Dashing && !collision.gameObject.CompareTag("Enemy"))
+        {
+            HandleBossCollisionWithObstacle(collision);
         }
     }
 
@@ -602,6 +595,59 @@ public class RushBoss : BaseEnemy
             {
                 rb.velocity = Vector2.zero;
             }
+        }
+    }
+
+    // 新增：处理BOSS与玩家的碰撞反弹
+    private void HandleBossCollisionWithPlayer(Collision2D collision)
+    {
+        if (!isAlive || collisionTimer > 0) return;
+
+        // 计算反弹方向（从碰撞点反方向）
+        if (collision.contactCount > 0)
+        {
+            ContactPoint2D contact = collision.GetContact(0);
+            Vector2 bounceDirection = Vector2.Reflect(dashDirection.normalized, contact.normal);
+
+            // 应用反弹力（较小的速度和较短的时间）
+            StartCoroutine(BounceBack(bounceDirection));
+        }
+    }
+
+    // 新增：处理BOSS与障碍物的碰撞反弹
+    private void HandleBossCollisionWithObstacle(Collision2D collision)
+    {
+        if (collision.contactCount > 0)
+        {
+            ContactPoint2D contact = collision.GetContact(0);
+            Vector2 bounceDirection = Vector2.Reflect(dashDirection.normalized, contact.normal);
+
+            // 应用反弹力
+            StartCoroutine(BounceBack(bounceDirection));
+        }
+    }
+
+    // 新增：反弹协程
+    private IEnumerator BounceBack(Vector2 bounceDirection)
+    {
+        if (!enableBounce) yield break;
+
+        // 停止当前冲撞
+        rb.velocity = Vector2.zero;
+
+        // 设置反弹参数
+        float bounceSpeed = dashSpeed * bounceSpeedMultiplier;
+
+        // 应用反弹速度
+        rb.velocity = bounceDirection.normalized * bounceSpeed;
+
+        // 等待反弹持续时间
+        yield return new WaitForSeconds(bounceDuration);
+
+        // 反弹结束后停止
+        if (currentState == BossState.Dashing)
+        {
+            rb.velocity = Vector2.zero;
         }
     }
 
@@ -624,6 +670,27 @@ public class RushBoss : BaseEnemy
 
             collisionTimer = collisionDamageInterval;
         }
+    }
+
+    #endregion
+
+    #region 视觉模型切换
+
+    private void SwitchModel(GameObject targetModel)
+    {
+        // 先隐藏所有模型
+        HideAllModels();
+
+        // 显示目标模型
+        if (targetModel != null)
+            targetModel.SetActive(true);
+    }
+
+    private void HideAllModels()
+    {
+        if (idleModel) idleModel.SetActive(false);
+        if (windupModel) windupModel.SetActive(false);
+        if (dashModel) dashModel.SetActive(false);
     }
 
     #endregion

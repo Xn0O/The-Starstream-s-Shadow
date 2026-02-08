@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [Header("生命值")]
     public float maxHealth = 100f;
     public float currentHealth;
+    public bool isDead = false; // 新增：死亡状态标志
 
     [Header("受伤震动设置")]
     public float damageShakeDuration = 0.15f;
@@ -36,6 +38,11 @@ public class PlayerController : MonoBehaviour
     public Vector3 hitEffectOffset = new Vector3(0, 0, 0); // 特效位置偏移
     public Transform hitEffectSpawnPoint; // 特效生成点（可选，如果不设置则使用玩家位置）
 
+    [Header("死亡设置")]
+    public GameObject deathObjectPrefab; // 死亡时替换的GameObject（可选）
+    public GameObject deathUI; // 死亡界面UI（可选，直接在场景中拖入）
+    public float deathDelay = 2f; // 死亡后延迟重新加载的时间
+
     private Rigidbody2D rb;
     private ScreenEffectManager screenEffectManager;
     private GameObject currentHitEffect; // 当前正在播放的受击特效
@@ -48,6 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
+        isDead = false; // 确保开始时不是死亡状态
 
         // 初始化最后有效方向为初始方向
         lastValidDirection = initialDirection;
@@ -61,10 +69,23 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogWarning("未找到ScreenEffectManager，受伤震动效果将不可用");
         }
+
+        // 隐藏死亡UI（如果存在）
+        if (deathUI != null)
+        {
+            deathUI.SetActive(false);
+        }
     }
 
     void Update()
     {
+        // 如果玩家死亡，禁止移动输入
+        if (isDead)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         // 移动输入
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
@@ -77,9 +98,122 @@ public class PlayerController : MonoBehaviour
         UpdateDirectionPics(moveDirection);
     }
 
+    // 被敌人攻击时调用
+    public void TakeDamage(float damage)
+    {
+        // 如果已经死亡，不再受到伤害
+        if (isDead) return;
+
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(0, currentHealth);
+
+        Debug.Log($"玩家受到伤害: {damage}, 当前生命: {currentHealth}");
+
+        // 调用UI显示伤害数字并统计玩家受伤害
+        UIManager ui = FindObjectOfType<UIManager>();
+        if (ui)
+        {
+            ui.ShowPlayerTakenDamageText(transform.position, damage, Color.red);
+        }
+
+        // 添加受伤震动反馈
+        ApplyDamageShake(damage);
+
+        // 如果伤害值达到大伤害阈值，播放受击特效
+        if (damage >= heavyDamageThreshold)
+        {
+            PlayHitEffect();
+        }
+
+        // 检查生命值是否小于等于0
+        if (currentHealth <= 0 && !isDead)
+        {
+            Die();
+        }
+    }
+
+    // 玩家死亡处理
+    private void Die()
+    {
+        isDead = true;
+        Debug.Log("玩家死亡！");
+
+        // 停止移动
+        rb.velocity = Vector2.zero;
+
+        // 更换死亡GameObject（如果设置了）
+        if (deathObjectPrefab != null)
+        {
+            GameObject deathObj = Instantiate(deathObjectPrefab, transform.position, Quaternion.identity);
+            deathObj.name = "PlayerDeathObject";
+        }
+
+        // 隐藏玩家贴图
+        HideAllDirectionPics();
+
+        // 禁用玩家控制
+        DisablePlayerControl();
+
+        // 显示死亡界面（如果设置了）
+        if (deathUI != null)
+        {
+            deathUI.SetActive(true);
+        }
+
+        // 延迟重新加载场景
+        Invoke("ReloadCurrentScene", deathDelay);
+    }
+
+    // 禁用玩家控制
+    private void DisablePlayerControl()
+    {
+        // 禁用Rigidbody2D
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.simulated = false; // 停止物理模拟
+        }
+
+        // 禁用所有碰撞器
+        var colliders = GetComponents<Collider2D>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        Debug.Log("玩家控制已禁用");
+    }
+
+    // 重新加载当前场景
+    private void ReloadCurrentScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // 治疗
+    public void Heal(float amount)
+    {
+        // 如果已经死亡，不能治疗
+        if (isDead) return;
+
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+
+        Debug.Log($"玩家治疗: {amount}, 当前生命: {currentHealth}");
+
+        // 调用UI显示治疗数字
+        UIManager ui = FindObjectOfType<UIManager>();
+        if (ui)
+        {
+            ui.ShowHealText(transform.position, amount, Color.green);
+        }
+    }
+
     // 更新方向图片显示
     void UpdateDirectionPics(Vector2 moveDirection)
     {
+        // 如果死亡，不更新方向
+        if (isDead) return;
+
         // 检测移动方向
         bool isMovingUp = moveDirection.y > directionThreshold;
         bool isMovingDown = moveDirection.y < -directionThreshold;
@@ -140,6 +274,9 @@ public class PlayerController : MonoBehaviour
     // 显示指定方向的贴图
     void ShowDirectionPic(Direction direction)
     {
+        // 如果死亡，不显示方向贴图
+        if (isDead) return;
+
         // 隐藏所有贴图
         HideAllDirectionPics();
 
@@ -167,6 +304,8 @@ public class PlayerController : MonoBehaviour
     // 保持最后一次的方向
     void KeepLastDirection()
     {
+        if (isDead) return;
+
         if (lastValidDirection != Direction.None)
         {
             ShowDirectionPic(lastValidDirection);
@@ -190,33 +329,10 @@ public class PlayerController : MonoBehaviour
     // 强制显示指定方向（可以从外部调用）
     public void SetDirection(Direction direction)
     {
+        if (isDead) return;
+
         lastValidDirection = direction;
         ShowDirectionPic(direction);
-    }
-
-    // 被敌人攻击时调用
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(0, currentHealth);
-
-        Debug.Log($"玩家受到伤害: {damage}, 当前生命: {currentHealth}");
-
-        // 调用UI显示伤害数字并统计玩家受伤害【仅修改此行方法名，适配统计】
-        UIManager ui = FindObjectOfType<UIManager>();
-        if (ui)
-        {
-            ui.ShowPlayerTakenDamageText(transform.position, damage, Color.red);
-        }
-
-        // 添加受伤震动反馈
-        ApplyDamageShake(damage);
-
-        // 如果伤害值达到大伤害阈值，播放受击特效
-        if (damage >= heavyDamageThreshold)
-        {
-            PlayHitEffect();
-        }
     }
 
     // 播放受击特效（简化版）
@@ -252,21 +368,6 @@ public class PlayerController : MonoBehaviour
         currentHitEffect = Instantiate(hitEffectPrefab, spawnPosition, Quaternion.identity);
 
         Debug.Log("播放受击特效");
-    }
-
-    // 治疗
-    public void Heal(float amount)
-    {
-        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
-
-        Debug.Log($"玩家治疗: {amount}, 当前生命: {currentHealth}");
-
-        // 调用UI显示治疗数字【此方法无需修改，UIManager已做兼容】
-        UIManager ui = FindObjectOfType<UIManager>();
-        if (ui)
-        {
-            ui.ShowHealText(transform.position, amount, Color.green);
-        }
     }
 
     // 应用受伤震动效果
@@ -318,52 +419,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"大伤害震动: 伤害={damage}, 震动强度={actualShakeMagnitude}, 持续时间={actualShakeDuration}");
     }
 
-    // 调试方法：在编辑器中测试方向显示
-    [ContextMenu("测试向上显示")]
-    public void TestUpDirection()
+    // 调试方法
+    [ContextMenu("测试死亡")]
+    public void TestDeath()
     {
-        SetDirection(Direction.Up);
-    }
-
-    [ContextMenu("测试向下显示")]
-    public void TestDownDirection()
-    {
-        SetDirection(Direction.Down);
-    }
-
-    [ContextMenu("测试向左显示")]
-    public void TestLeftDirection()
-    {
-        SetDirection(Direction.Left);
-    }
-
-    [ContextMenu("测试向右显示")]
-    public void TestRightDirection()
-    {
-        SetDirection(Direction.Right);
-    }
-
-    [ContextMenu("隐藏所有方向")]
-    public void DebugHideAllDirections()
-    {
-        SetDirection(Direction.None);
-    }
-
-    [ContextMenu("重置为初始方向")]
-    public void ResetToInitialDirection()
-    {
-        SetDirection(initialDirection);
-    }
-
-    [ContextMenu("测试大伤害受击特效")]
-    public void TestHeavyDamageEffect()
-    {
-        TakeDamage(heavyDamageThreshold + 5f);
-    }
-
-    [ContextMenu("测试小伤害")]
-    public void TestLightDamage()
-    {
-        TakeDamage(heavyDamageThreshold - 5f);
+        TakeDamage(currentHealth + 1); // 受到超过当前生命的伤害
     }
 }

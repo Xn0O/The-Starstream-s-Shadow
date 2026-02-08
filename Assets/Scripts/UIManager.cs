@@ -179,10 +179,20 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        // 初始化伤害数字对象池
-        InitializeObjectPools();
         // 自动获取缺失的核心脚本引用
         AutoGetReference();
+
+        // 检查伤害数字预制体是否存在
+        if (damageTextPrefab == null)
+        {
+            Debug.LogError("? 错误：伤害数字预制体(damageTextPrefab)为空！请检查Inspector设置");
+        }
+        else
+        {
+            // 初始化伤害数字对象池
+            InitializeObjectPools();
+        }
+
         // 初始化生命值滑动条
         InitializeHealthSlider();
         // 初始化UI显示（生命值/星蚀/释放提示）
@@ -204,7 +214,10 @@ public class UIManager : MonoBehaviour
         UpdateReleaseHint();
 
         // 清理过期的伤害数字对象，回收至对象池
-        CleanupActiveTexts();
+        if (damageTextPrefab != null)
+        {
+            CleanupActiveTexts();
+        }
 
         // 检测按键切换统计面板
         if (Input.GetKeyDown(toggleStatsKey))
@@ -507,6 +520,7 @@ public class UIManager : MonoBehaviour
     /// <param name="color">数字颜色</param>
     public void ShowDamageText(Vector3 worldPosition, float damage, Color color)
     {
+        if (damageTextPrefab == null) return;
         if (!CanShowDamageText(worldPosition, damage, "boss_damage")) return;
         SpawnDamageText(worldPosition, $"-{damage:F0}", color);
     }
@@ -519,6 +533,7 @@ public class UIManager : MonoBehaviour
     /// <param name="color">数字颜色</param>
     public void ShowPlayerDealDamageText(Vector3 worldPos, float damage, Color color)
     {
+        if (damageTextPrefab == null) return;
         if (!CanShowDamageText(worldPos, damage, "player_deal")) return;
         // 显示伤害数字
         SpawnDamageText(worldPos, $"-{damage:F0}", color);
@@ -534,6 +549,7 @@ public class UIManager : MonoBehaviour
     /// <param name="color">数字颜色</param>
     public void ShowPlayerTakenDamageText(Vector3 worldPos, float damage, Color color)
     {
+        if (damageTextPrefab == null) return;
         if (!CanShowDamageText(worldPos, damage, "player_taken")) return;
         // 显示伤害数字
         SpawnDamageText(worldPos, $"-{damage:F0}", color);
@@ -560,6 +576,7 @@ public class UIManager : MonoBehaviour
     /// <param name="color">数字颜色</param>
     public void ShowPlayerHealText(Vector3 worldPos, float heal, Color color)
     {
+        if (damageTextPrefab == null) return;
         if (!CanShowDamageText(worldPos, heal, "player_heal")) return;
         // 显示治疗数字
         SpawnDamageText(worldPos, $"+{heal:F0}", color);
@@ -576,6 +593,7 @@ public class UIManager : MonoBehaviour
     /// <returns>是否可以显示</returns>
     private bool CanShowDamageText(Vector3 pos, float value, string type)
     {
+        if (damageTextPrefab == null) return false;
         if (!damageTextPrefab || !gameCanvas) return false;
 
         // 生成唯一标识符
@@ -668,6 +686,8 @@ public class UIManager : MonoBehaviour
     /// <returns>伤害文本对象</returns>
     private GameObject GetDamageTextFromPool()
     {
+        if (damageTextPool == null) return null;
+
         if (damageTextPool.Count > 0)
         {
             return damageTextPool.Dequeue();
@@ -675,6 +695,10 @@ public class UIManager : MonoBehaviour
         else
         {
             // 如果池子为空，创建新的对象（动态扩容）
+            if (damageTextPrefab == null) return null;
+            if (gameCanvas == null) return null;
+            if (gameCanvas.transform == null) return null;
+
             GameObject newObj = Instantiate(damageTextPrefab, gameCanvas.transform);
             Debug.LogWarning("伤害数字对象池为空，创建新的对象，建议增加对象池大小");
             return newObj;
@@ -737,7 +761,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void CleanupActiveTexts()
     {
-        if (activeDamageTexts.Count == 0) return;
+        if (activeDamageTexts == null || activeDamageTexts.Count == 0) return;
 
         int count = activeDamageTexts.Count;
         int recycledCount = 0;
@@ -745,11 +769,19 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             GameObject textObj = activeDamageTexts.Dequeue();
-            if (textObj != null && textObj.activeSelf)
+
+            // 处理 null 对象
+            if (textObj == null)
+            {
+                Debug.LogWarning("发现 null 对象，已跳过");
+                continue;
+            }
+
+            if (textObj.activeSelf)
             {
                 activeDamageTexts.Enqueue(textObj);
             }
-            else if (textObj != null)
+            else
             {
                 ReturnDamageTextToPool(textObj);
                 recycledCount++;
@@ -832,7 +864,7 @@ public class UIManager : MonoBehaviour
 
         while (elapsed < duration)
         {
-            if (textObj == null || !textObj.activeSelf) yield break;
+            if (textObj == null) yield break;
 
             elapsed += Time.deltaTime;
             float progress = elapsed / duration;
@@ -853,8 +885,8 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
 
-        // 动画结束后隐藏对象（后续会被回收）
-        if (textObj != null && textObj.activeSelf)
+        // 动画结束后安全地回收对象
+        if (textObj != null)
         {
             textObj.SetActive(false);
         }
@@ -867,6 +899,9 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
+        // 停止所有协程
+        StopAllCoroutines();
+
         if (damageTextPool != null)
         {
             foreach (var obj in damageTextPool)
@@ -879,6 +914,8 @@ public class UIManager : MonoBehaviour
 
         if (activeDamageTexts != null)
         {
+            // 清理队列中的 null 引用
+            activeDamageTexts = new Queue<GameObject>(activeDamageTexts.Where(obj => obj != null));
             activeDamageTexts.Clear();
         }
 

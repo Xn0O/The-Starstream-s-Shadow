@@ -37,11 +37,18 @@ public class DialogueManager : MonoBehaviour
     public KeyCode prevKey = KeyCode.A;
     public KeyCode altPrevKey = KeyCode.LeftArrow;
     public KeyCode skipTypingKey = KeyCode.S;
+    public KeyCode altskipTypingKey = KeyCode.S;
 
     [Header("效果设置")]
     public bool autoStartTyping = true;
     public bool playPageSound = true;
     public float fadeDuration = 0.3f;
+
+    [Header("音量设置")]
+    [Range(0, 1)]
+    public float typingSoundVolume = 0.5f;
+    [Range(0, 1)]
+    public float pageSoundVolume = 0.7f;
 
     private int currentPageIndex = 0;
     private bool isTransitioning = false;
@@ -81,7 +88,7 @@ public class DialogueManager : MonoBehaviour
         if (isTransitioning) return;
 
         // 检测跳过打字
-        if (isTyping && Input.GetKeyDown(skipTypingKey))
+        if (isTyping && (Input.GetKeyDown(skipTypingKey) || Input.GetKeyDown(altskipTypingKey)))
         {
             SkipTyping();
             return;
@@ -231,10 +238,10 @@ public class DialogueManager : MonoBehaviour
             pageCounterText.text = $"{pageIndex + 1}/{dialoguePages.Count}";
         }
 
-        // 播放页面音效
+        // 播放页面音效（使用音量参数）
         if (playPageSound && page.pageSound != null && audioSource != null)
         {
-            audioSource.PlayOneShot(page.pageSound);
+            audioSource.PlayOneShot(page.pageSound, pageSoundVolume);
         }
 
         // 处理GameObjects
@@ -297,13 +304,13 @@ public class DialogueManager : MonoBehaviour
                 dialogueText.text = fullText.Substring(0, i);
             }
 
-            // 播放打字音效
+            // 播放打字音效（使用音量参数）
             if (typingSoundClip != null && audioSource != null && i < fullText.Length)
             {
                 char c = fullText[i];
                 if (c != ' ' && c != '\n' && c != '\t')
                 {
-                    audioSource.PlayOneShot(typingSoundClip, 0.1f);
+                    audioSource.PlayOneShot(typingSoundClip, typingSoundVolume);
                 }
             }
 
