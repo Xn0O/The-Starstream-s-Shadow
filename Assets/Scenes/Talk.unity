@@ -153,7 +153,7 @@ Transform:
   - {fileID: 8695516645715980343}
   - {fileID: 71982166}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &29377085
 GameObject:
@@ -1077,7 +1077,7 @@ Transform:
   - {fileID: 1833916210}
   - {fileID: 2041507115}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &196257561
 MonoBehaviour:
@@ -2019,7 +2019,7 @@ Transform:
   - {fileID: 1998184352}
   - {fileID: 1722808851}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &482730466
 GameObject:
@@ -2449,7 +2449,7 @@ Transform:
   - {fileID: 5343049058583878432}
   - {fileID: 4696430288226140113}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &627001562
 GameObject:
@@ -3075,6 +3075,134 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &790526112
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 790526114}
+  - component: {fileID: 790526113}
+  m_Layer: 0
+  m_Name: BGM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &790526113
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790526112}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: e03b2dbd95bb623418edfe8009638e96, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 0.8
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 100
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &790526114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790526112}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.999371, y: -0.19099459, z: -0.2641208}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &799107005
 GameObject:
   m_ObjectHideFlags: 0
@@ -3385,7 +3513,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &889805893
 GameObject:
@@ -4486,7 +4614,7 @@ RectTransform:
   - {fileID: 1591081778}
   - {fileID: 814083880}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5060,7 +5188,7 @@ Transform:
   - {fileID: 745112812}
   - {fileID: 1675877497}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1430401867
 GameObject:
@@ -5570,7 +5698,7 @@ Transform:
   m_Children:
   - {fileID: 1082662600}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1675877495
 GameObject:
@@ -5842,6 +5970,7 @@ MonoBehaviour:
   initialDirection: 2
   maxHealth: 100
   currentHealth: 0
+  isDead: 0
   damageShakeDuration: 0.2
   damageShakeMagnitude: 0.3
   heavyDamageShakeDuration: 0.3
@@ -5850,6 +5979,9 @@ MonoBehaviour:
   hitEffectPrefab: {fileID: 7113697253715595882, guid: 86a5d8df2b0517b4e8cea6319f5590c4, type: 3}
   hitEffectOffset: {x: 0, y: 0, z: 0}
   hitEffectSpawnPoint: {fileID: 0}
+  deathObjectPrefab: {fileID: 0}
+  deathUI: {fileID: 0}
+  deathDelay: 2
 --- !u!61 &1722808855
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6866,7 +6998,7 @@ RectTransform:
   - {fileID: 2119498472}
   - {fileID: 1514358227}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7039,7 +7171,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2013036323}
   - component: {fileID: 2013036322}
-  - component: {fileID: 2013036324}
   m_Layer: 5
   m_Name: DIALOGE
   m_TagString: Untagged
@@ -7076,7 +7207,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u5173\u4E8E\u64CD\u4F5C.\nWASD/\u65B9\u5411\u952E - \u79FB\u52A8\n\u7A7A\u683C\u952E
       - \u91CA\u653E"
     showObjects:
@@ -7086,7 +7217,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "Tab - \u67E5\u770B/\u5173\u95ED\u7EDF\u8BA1\u4FE1\u606F\n\u53EF\u4EE5\u67E5\u770B\u6700\u9AD8\u4E00\u51FB\u3001\u627F\u53D7\u4F24\u5BB3\u3001\u6700\u9AD8\u6CBB\u7597\u3001\u7D2F\u79EF\u661F\u7EB9"
     showObjects:
     - {fileID: 802265142}
@@ -7098,7 +7229,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 50
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u6211\u7A0D\u540E\u518D\u89E3\u91CA\u4E00\u4E0B\u91CA\u653E\u662F\u4EC0\u4E48\uFF01\n\u5148\u6765\u81EA\u6211\u4ECB\u7ECD\u4E00\u4E0B\uFF01\uFF01"
     showObjects:
     - {fileID: 627001562}
@@ -7108,7 +7239,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u6211\u662F\u4E00\u540D\u5929\u4F7F\uFF0C\u540D\u5B57\u53EB\u505AAio"
     showObjects:
     - {fileID: 1386551313}
@@ -7119,7 +7250,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u6BCF\u4F4D\u5929\u4F7F\u4ECE\u8BDE\u751F\u5F00\u59CB\u5C31\u62E5\u6709\u4E00\u4EF6\u4FE1\u7269\uFF0C\u4FE1\u7269\u8D4B\u4E88\u5929\u4F7F\u4E0D\u540C\u7684\u80FD\u529B"
     showObjects:
     - {fileID: 1386551313}
@@ -7130,7 +7261,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u6211\u7684\u4FE1\u7269\u662F\u80CC\u5305\uFF0C\u53EF\u4EE5\u5438\u6536\u4F24\u5BB3\u5E76\u5B58\u50A8\u8D77\u6765\uFF0C"
     showObjects:
     - {fileID: 1386551313}
@@ -7141,7 +7272,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u4F46\u526F\u4F5C\u7528\u662F\u50A8\u5B58\u5728\u53E3\u888B\u7684\u80FD\u91CF\u6781\u5176\u4E0D\u7A33\u5B9A\uFF0C\u4F1A\u7F13\u6162\u707C\u70E7\u81EA\u5DF1\uFF08\u57FA\u4E8E\u5C42\u6570\uFF09"
     showObjects:
     - {fileID: 1386551313}
@@ -7152,7 +7283,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u6240\u4EE5\u9700\u8981\u53CA\u65F6\u91CA\u653E\u80FD\u91CF\uFF0C\u80FD\u91CF\u4F1A\u5BF9\u5468\u56F4\u9020\u6210\u4F24\u5BB3\uFF08\u57FA\u4E8E\u5C42\u6570\uFF09"
     showObjects:
     - {fileID: 1386551313}
@@ -7163,7 +7294,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u91CA\u653E\u80FD\u91CF\u540E\u4F1A\u56DE\u590D\u751F\u547D\uFF08\u57FA\u4E8E\u5C42\u6570\uFF09\uFF0C\u5EFA\u8BAE\u591A\u53E0\u52A0\u5C42\u6570\uFF01\u6709\u5F88\u591A\u597D\u5904\u5662"
     showObjects:
     - {fileID: 1386551313}
@@ -7176,7 +7307,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u4F60\u53EF\u4EE5\u5C1D\u8BD5\u64CD\u4F5C\u4E00\u4E0B\uFF01\uFF01\u5982\u679C\u4F60\u8981\u7EE7\u7EED\u542C\u6211\u8BF4\u8BDD\u5C31\u6309\u4E0BE\uFF0C\u6216\u8005\u6309\u4E0BQ\u6765\u56DE\u987E\u5BF9\u8BDD"
     showObjects:
     - {fileID: 1386551313}
@@ -7189,7 +7320,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u5982\u679C\u654C\u4EBA\u5468\u56F4\u6709\u8303\u56F4\u6307\u793A\uFF0C\u6700\u597D\u4E0D\u8981\u9760\u8FD1\uFF0C\u6BD4\u5982\u8FD9\u56E2\u706B\u7684\u5468\u56F4\u7684\u4E00\u5708"
     showObjects:
     - {fileID: 1386551313}
@@ -7201,7 +7332,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u654C\u4EBA\u4F1A\u5BF9\u8FD9\u4E2A\u8303\u56F4\u9020\u6210\u6301\u7EED\u9AD8\u989D\u7684\u4F24\u5BB3"
     showObjects:
     - {fileID: 1386551313}
@@ -7214,7 +7345,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u5982\u679C\u4F60\u5DF2\u7ECF\u5B66\u4F1A\u64CD\u4F5C\u7684\u8BDD\n\u6211\u5C31\u544A\u8BC9\u4F60\u63A5\u4E0B\u6765\u9700\u8981\u505A\u4E9B\u4EC0\u4E48\uFF01"
     showObjects:
     - {fileID: 1386551313}
@@ -7227,7 +7358,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u8FD9\u5468\u68EE\u6797\u91CC\u51FA\u73B0\u4E86\u4E24\u53EA\u602A\u7269\uFF0C\u6211\u88AB\u6D3E\u53BB\u8D1F\u8D23\u9A71\u9010\u5B83\u4EEC"
     showObjects:
     - {fileID: 1386551313}
@@ -7239,7 +7370,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u56FE\u9274\u91CC\u597D\u50CF\u8BB0\u8F7D\u7740\u5B83\u4EEC\u7684\u5F31\u70B9\uFF0C\u6211\u770B\u770B......"
     showObjects:
     - {fileID: 1386551313}
@@ -7251,7 +7382,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u9ED1\u9ED1\u6076\u9B54\u53EA\u6709\u5728\u3010\u51FA\u73B0\u3011\u7684\u65F6\u5019\u624D\u80FD\u4F24\u5BB3\u5230\u5B83\uFF0C\u6240\u4EE5\u5728\u8FD9\u4E4B\u524D\u9700\u8981\u53E0\u52A0\u5C42\u6570"
     showObjects:
     - {fileID: 1386551313}
@@ -7263,7 +7394,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u7EA2\u7EA2\u6076\u9B54\u4F1A\u53EC\u5524\u65B9\u65B9\u7684\u4E1C\u897F\uFF0C\u5F53\u65B9\u65B9\u671D\u4F60\u51B2\u649E\u65F6\uFF0C\u53EA\u8981\u91CA\u653E\u65F6\u673A\u5408\u9002\uFF0C\u4F60\u5C31\u53EF\u4EE5\u3010\u53CD\u5F39\u3011\u65B9\u65B9"
     showObjects:
     - {fileID: 1386551313}
@@ -7275,7 +7406,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: "\u3010\u53CD\u5F39\u3011\u7684\u65B9\u65B9\u4F1A\u5BF9\u7EA2\u7EA2\u9020\u6210\n2500%\u7684\u4F24\u5BB3\uFF0C\u4E00\u5B9A\u8981\u8BB0\u4F4F\u5B83\u4EEC\u7684\u5F31\u70B9\u5662\uFF01\uFF01"
     showObjects:
     - {fileID: 1386551313}
@@ -7287,7 +7418,7 @@ MonoBehaviour:
     useTypewriter: 1
     typingSpeed: 20
     typingSound: {fileID: 8300000, guid: 85dd71b50e5eda34eaf1d3a378f966ae, type: 3}
-    pageSound: {fileID: 0}
+    pageSound: {fileID: 8300000, guid: 621f4344621af344f8fd84024cb66e33, type: 3}
   - text: ' '
     showObjects:
     - {fileID: 1386551313}
@@ -7307,7 +7438,7 @@ MonoBehaviour:
   autoStartTyping: 1
   playPageSound: 1
   fadeDuration: 0
-  typingSoundVolume: 1
+  typingSoundVolume: 0.25
   pageSoundVolume: 0.7
 --- !u!224 &2013036323
 RectTransform:
@@ -7322,109 +7453,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 193.75, y: 108.984375}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!82 &2013036324
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013036321}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e03b2dbd95bb623418edfe8009638e96, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 0.8
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 155
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &2041507113
 GameObject:
   m_ObjectHideFlags: 0
@@ -8079,7 +8114,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.25490198}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.2901961}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -14014,7 +14049,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.7830189, g: 0.7276166, b: 0.7276166, a: 0.25490198}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.4392157}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -14098,7 +14133,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: bbf5023368147f749b014c9171de6c7d, type: 3}
-  m_Color: {r: 0.8396226, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.0141509175, b: 0.0141509175, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

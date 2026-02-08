@@ -133,6 +133,18 @@ public class ScreenEffectManager : MonoBehaviour
 
     public void ShakeCamera(float duration = 0.3f, float magnitude = 0.15f)
     {
+        // 确保相机引用有效
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+            if (mainCamera == null)
+            {
+                Debug.LogWarning("无法找到有效相机，跳过震动效果");
+                return;
+            }
+            originalCameraPosition = mainCamera.transform.localPosition;
+        }
+
         if (isShaking && shakeCoroutine != null)
         {
             StopCoroutine(shakeCoroutine);
@@ -146,8 +158,22 @@ public class ScreenEffectManager : MonoBehaviour
         isShaking = true;
         float elapsed = 0f;
 
+        // 在协程开始时检查相机是否有效
+        if (mainCamera == null)
+        {
+            isShaking = false;
+            yield break;
+        }
+
         while (elapsed < duration)
         {
+            // 每次循环都检查相机是否仍然有效
+            if (mainCamera == null)
+            {
+                isShaking = false;
+                yield break;
+            }
+
             // 计算衰减
             float damping = 1f - (elapsed / duration);
 
@@ -162,8 +188,12 @@ public class ScreenEffectManager : MonoBehaviour
             yield return null;
         }
 
-        // 恢复原位置
-        mainCamera.transform.localPosition = originalCameraPosition;
+        // 恢复原位置前再次检查
+        if (mainCamera != null)
+        {
+            mainCamera.transform.localPosition = originalCameraPosition;
+        }
+
         isShaking = false;
     }
 
