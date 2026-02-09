@@ -222,15 +222,14 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2038938627}
+  m_Children: []
   m_Father: {fileID: 848020332}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -48.00006, y: 3.9001007}
-  m_SizeDelta: {x: 54.6109, y: 13.511}
+  m_AnchoredPosition: {x: -97, y: 35.5}
+  m_SizeDelta: {x: 30.014, y: 13.511}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &53818740
 MonoBehaviour:
@@ -468,7 +467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &249896889
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1135,6 +1134,7 @@ RectTransform:
   m_Children:
   - {fileID: 249896889}
   - {fileID: 53818739}
+  - {fileID: 2038938627}
   m_Father: {fileID: 1149197380}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7233,13 +7233,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 53818739}
-  m_RootOrder: 0
+  m_Father: {fileID: 848020332}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.5268555, y: 0}
-  m_SizeDelta: {x: 59.6544, y: 13.5084}
+  m_AnchoredPosition: {x: -92.214806, y: -2.643}
+  m_SizeDelta: {x: 33.8196, y: 13.5084}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2038938628
 MonoBehaviour:
@@ -7274,7 +7274,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Nino
+  m_Text: ' Nino'
 --- !u!222 &2038938629
 CanvasRenderer:
   m_ObjectHideFlags: 0

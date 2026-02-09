@@ -517,20 +517,20 @@ public class MoleBoss : BaseEnemy
 
     #endregion
 
-    void OnGUI()
-    {
-        // 调试信息：显示当前小怪数量
-        if (isAlive)
-        {
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 20;
-            style.normal.textColor = Color.white;
-            GUI.Label(new Rect(10, 100, 300, 50),
-                     $"小怪数量: {GetValidMinionCount()}/{stopSpawnThreshold} (列表: {activeMinionList.Count})", style);
-            GUI.Label(new Rect(10, 130, 300, 50),
-                     $"当前状态: {currentState}", style);
-            GUI.Label(new Rect(10, 160, 300, 50),
-                     $"允许生成: {shouldSpawnMinions}", style);
-        }
-    }
+    //void OnGUI()
+    //{
+    //    // 调试信息：显示当前小怪数量
+    //    if (isAlive)
+    //    {
+    //        GUIStyle style = new GUIStyle();
+    //        style.fontSize = 20;
+    //        style.normal.textColor = Color.white;
+    //        GUI.Label(new Rect(10, 100, 300, 50),
+    //                 $"小怪数量: {GetValidMinionCount()}/{stopSpawnThreshold} (列表: {activeMinionList.Count})", style);
+    //        GUI.Label(new Rect(10, 130, 300, 50),
+    //                 $"当前状态: {currentState}", style);
+    //        GUI.Label(new Rect(10, 160, 300, 50),
+    //                 $"允许生成: {shouldSpawnMinions}", style);
+    //    }
+    //}
 }

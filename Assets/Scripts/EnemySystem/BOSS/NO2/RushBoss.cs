@@ -799,26 +799,26 @@ public class RushBoss : BaseEnemy
         Debug.Log($"当前状态: {currentState}");
     }
 
-    void OnGUI()
-    {
-        if (isAlive)
-        {
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 16;
-            style.normal.textColor = Color.white;
-
-            GUI.Label(new Rect(10, 100, 300, 20),
-                     $"Boss状态: {currentState}", style);
-            GUI.Label(new Rect(10, 120, 300, 20),
-                     $"生命: {currentHealth:F0}/{maxHealth:F0}", style);
-            GUI.Label(new Rect(10, 140, 300, 20),
-                     $"小怪: {GetValidMinionCount()}/{minionCount}", style);
-            GUI.Label(new Rect(10, 160, 300, 20),
-                     $"已召唤: {hasSummonedThisCycle}", style);
-            GUI.Label(new Rect(10, 180, 300, 20),
-                     $"自动召唤: {autoRespawnMinions}", style);
-        }
-    }
+    //void OnGUI()
+    //{
+    //    if (isAlive)
+    //    {
+    //        GUIStyle style = new GUIStyle();
+    //        style.fontSize = 16;
+    //        style.normal.textColor = Color.white;
+    //
+    //        GUI.Label(new Rect(10, 100, 300, 20),
+    //                 $"Boss状态: {currentState}", style);
+    //        GUI.Label(new Rect(10, 120, 300, 20),
+    //                 $"生命: {currentHealth:F0}/{maxHealth:F0}", style);
+    //        GUI.Label(new Rect(10, 140, 300, 20),
+    //                 $"小怪: {GetValidMinionCount()}/{minionCount}", style);
+    //        GUI.Label(new Rect(10, 160, 300, 20),
+    //                 $"已召唤: {hasSummonedThisCycle}", style);
+    //        GUI.Label(new Rect(10, 180, 300, 20),
+    //                 $"自动召唤: {autoRespawnMinions}", style);
+    //    }
+    //}
 
     #endregion
 }

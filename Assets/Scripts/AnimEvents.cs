@@ -39,5 +39,9 @@ public class AnimEvents : MonoBehaviour
     {
         SceneManager.LoadScene("BOSS2");
     }
+    public void END()
+    {
+        SceneManager.LoadScene("TalkEnd");
+    }
 
 }
