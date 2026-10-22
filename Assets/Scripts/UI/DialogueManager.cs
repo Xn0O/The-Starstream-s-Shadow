@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -186,6 +187,8 @@ public class DialogueManager : MonoBehaviour
     private AudioSource audioSource;
     private List<ColorMarker> currentColorMarkers = new List<ColorMarker>();
     private string currentPlainText = "";
+    private int chineseFontSize;
+    private float chineseLineSpacing;
 
     // 颜色标记结构
     private struct ColorMarker
@@ -214,6 +217,8 @@ public class DialogueManager : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
+
+        ApplyLanguageLayout();
 
         if (dialoguePages.Count > 0)
         {
@@ -391,10 +396,53 @@ public class DialogueManager : MonoBehaviour
         canvasGroup.alpha = targetAlpha;
     }
 
+    void OnEnable()
+    {
+        Localization.LanguageChanged += RefreshLocalizedText;
+    }
+
+    void OnDisable()
+    {
+        Localization.LanguageChanged -= RefreshLocalizedText;
+    }
+
+    void RefreshLocalizedText()
+    {
+        if (dialoguePages == null || dialoguePages.Count == 0) return;
+
+        int index = Mathf.Clamp(currentPageIndex, 0, dialoguePages.Count - 1);
+        ShowPage(index);
+    }
+
+    void ApplyLanguageLayout()
+    {
+        if (dialogueText == null) return;
+
+        if (chineseFontSize <= 0)
+        {
+            chineseFontSize = dialogueText.fontSize;
+            chineseLineSpacing = dialogueText.lineSpacing;
+        }
+
+        if (Localization.IsEnglish)
+        {
+            // 英文译文更长，缩小字号与行距以避免超出对话框。
+            dialogueText.fontSize = Mathf.Max(1, Mathf.RoundToInt(chineseFontSize * 0.75f));
+            dialogueText.lineSpacing = chineseLineSpacing * 0.6f;
+        }
+        else
+        {
+            dialogueText.fontSize = chineseFontSize;
+            dialogueText.lineSpacing = chineseLineSpacing;
+        }
+    }
+
     void ShowPage(int pageIndex)
     {
         currentPageIndex = pageIndex;
+        ApplyLanguageLayout();
         DialoguePage page = dialoguePages[pageIndex];
+        string pageText = Localization.GetDialogue(SceneManager.GetActiveScene().name, pageIndex, page.text);
 
         Debug.Log($"显示第 {pageIndex + 1} 页，使用打字机: {page.useTypewriter}，速度: {page.typingSpeed}");
 
@@ -435,15 +483,15 @@ public class DialogueManager : MonoBehaviour
         currentColorMarkers.Clear();
         if (enableColorTags)
         {
-            currentPlainText = ParseColorMarkersAndGetPlainText(page.text);
+            currentPlainText = ParseColorMarkersAndGetPlainText(pageText);
         }
         else
         {
-            currentPlainText = page.text;
+            currentPlainText = pageText;
         }
 
         // 开始打字机效果
-        if (page.useTypewriter && !string.IsNullOrEmpty(page.text) && dialogueText != null)
+        if (page.useTypewriter && !string.IsNullOrEmpty(pageText) && dialogueText != null)
         {
             if (autoStartTyping)
             {
@@ -468,6 +516,10 @@ public class DialogueManager : MonoBehaviour
         if (typingSpeed <= 0)
             typingSpeed = 30f;
 
+        // 英文文本更长，打字速度提高 4 倍。
+        if (Localization.IsEnglish)
+            typingSpeed *= 4f;
+
         float delayPerChar = 1f / typingSpeed;
 
         for (int i = 0; i <= plainText.Length; i++)
@@ -486,7 +538,14 @@ public class DialogueManager : MonoBehaviour
                 char c = plainText[i];
                 if (c != ' ' && c != '\n' && c != '\t')
                 {
-                    audioSource.PlayOneShot(typingSoundClip, typingSoundVolume);
+                    bool playSound = true;
+
+                    // 英文按单词播放，避免每个字母都响、听起来像机关枪。
+                    if (Localization.IsEnglish && i > 0)
+                        playSound = char.IsWhiteSpace(plainText[i - 1]);
+
+                    if (playSound)
+                        audioSource.PlayOneShot(typingSoundClip, typingSoundVolume);
                 }
             }
 

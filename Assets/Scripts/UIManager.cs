@@ -39,9 +39,6 @@ public class UIManager : MonoBehaviour
     // 对象池相关变量
     private Queue<GameObject> damageTextPool;
     private Queue<GameObject> activeDamageTexts;
-    // Z轴偏移计数器 - 防止伤害数字重叠
-    private float zOffsetCounter = 0f;
-
     // 防止重复显示的防抖机制
     private Dictionary<string, float> lastDamageTime = new Dictionary<string, float>();
     private readonly float damageCooldown = 0.1f; // 100毫秒内不重复显示同一伤害/治疗
@@ -116,7 +113,7 @@ public class UIManager : MonoBehaviour
 
         bossHealthBar.SetActive(true);
 
-        if (bossNameText) bossNameText.text = bossName;
+        if (bossNameText) bossNameText.text = Localization.Translate(bossName);
         if (bossHealthSlider)
         {
             bossHealthSlider.maxValue = maxHealth;
@@ -270,6 +267,8 @@ public class UIManager : MonoBehaviour
         if (!releaseSystem)
             releaseSystem = FindObjectOfType<ReleaseSystem>();
         if (!gameCanvas)
+            gameCanvas = GetComponentInParent<Canvas>();
+        if (!gameCanvas)
             gameCanvas = FindObjectOfType<Canvas>();
         if (!healthSlider)
         {
@@ -405,7 +404,7 @@ public class UIManager : MonoBehaviour
 
             if (releaseHintText && shouldShow)
             {
-                releaseHintText.text = $"按 {releaseSystem.releaseKey} 键释放能量";
+                releaseHintText.text = Localization.GetFormat("release_hint", releaseSystem.releaseKey);
             }
         }
     }
@@ -650,18 +649,31 @@ public class UIManager : MonoBehaviour
         float randomX = Random.Range(-horizontalOffset, horizontalOffset);
         float randomY = Random.Range(-verticalOffset, verticalOffset);
 
-        // 使用Z轴分层防止重叠
-        zOffsetCounter -= 0.1f;
-        if (zOffsetCounter < -10f) zOffsetCounter = 0f;
-
-        screenPosition += new Vector3(randomX, randomY, zOffsetCounter);
+        screenPosition += new Vector3(randomX, randomY, 0f);
 
         // 从对象池获取伤害文本对象
         GameObject textObj = GetDamageTextFromPool();
         if (textObj == null) return;
 
-        // 设置位置和显示状态
-        textObj.transform.position = screenPosition;
+        // 设置位置和显示状态。
+        // Canvas 现在由专用 UI 相机渲染，屏幕坐标需要转换成 Canvas 本地坐标，
+        // 不能再直接把屏幕像素当作世界坐标使用。
+        RectTransform canvasRect = gameCanvas.transform as RectTransform;
+        Camera canvasCamera = gameCanvas.renderMode == RenderMode.ScreenSpaceOverlay
+            ? null
+            : gameCanvas.worldCamera;
+
+        Vector2 localPoint;
+        if (canvasRect != null &&
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, canvasCamera, out localPoint))
+        {
+            textObj.transform.localPosition = new Vector3(localPoint.x, localPoint.y, 0f);
+        }
+        else
+        {
+            textObj.transform.position = screenPosition;
+        }
+
         textObj.SetActive(true);
 
         // 设置文本内容和颜色
@@ -860,7 +872,7 @@ public class UIManager : MonoBehaviour
     {
         float duration = 1.5f;
         float elapsed = 0f;
-        Vector3 startPosition = textObj.transform.position;
+        Vector3 startPosition = textObj.transform.localPosition;
 
         while (elapsed < duration)
         {
@@ -869,9 +881,9 @@ public class UIManager : MonoBehaviour
             elapsed += Time.deltaTime;
             float progress = elapsed / duration;
 
-            // 向上移动
+            // 向上移动（使用 Canvas 本地坐标）
             Vector3 newPosition = startPosition + new Vector3(0, 50f * progress, 0);
-            textObj.transform.position = newPosition;
+            textObj.transform.localPosition = newPosition;
 
             // 淡出效果
             Text text = textObj.GetComponent<Text>();

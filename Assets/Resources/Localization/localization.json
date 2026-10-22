@@ -1,0 +1,146 @@
+{
+  "ui": [
+    {
+      "zh": "- 这是一个游戏介绍 -\n",
+      "en": "- Game Intro -\n"
+    },
+    {
+      "zh": "- 这是一个游戏介绍 -",
+      "en": "- Game Intro -"
+    },
+    {
+      "zh": "Tab打开或关闭统计面板",
+      "en": "Press Tab to toggle the stats panel"
+    },
+    {
+      "zh": "WASD - 移动，空格 - 释放",
+      "en": "WASD - Move, Space - Release"
+    },
+    {
+      "zh": "WASD-移动 空格-释放/确认",
+      "en": "WASD - Move   Space - Release / Confirm"
+    },
+    {
+      "zh": "https://chajamakesmusic.itch.io/cute-and-silly-rpg-music-pack\nhttps://sonatina.itch.io/cosy-cafe-bgms\nhttps://www.bilibili.com/video/BV1r64y1Z7q3\nhttps://youtu.be/sd1mQHTsVks\n长按ESC结束游戏",
+      "en": "https://chajamakesmusic.itch.io/cute-and-silly-rpg-music-pack\nhttps://sonatina.itch.io/cosy-cafe-bgms\nhttps://www.bilibili.com/video/BV1r64y1Z7q3\nhttps://youtu.be/sd1mQHTsVks\nHold ESC to end the game"
+    },
+    {
+      "zh": "你的名字YOUR",
+      "en": "YOUR NAME"
+    },
+    {
+      "zh": "大家听我说啊，我接下来说的事情很重要，那就是，这是一段测试文本，重要吧！",
+      "en": "Listen up, everyone. What I'm about to say is very important. That is—this is a test text. Pretty important, right!"
+    },
+    {
+      "zh": "开始",
+      "en": "Start"
+    },
+    {
+      "zh": "结束",
+      "en": "Quit"
+    },
+    {
+      "zh": "感谢游玩",
+      "en": "Thanks for playing"
+    },
+    {
+      "zh": "还没做完！",
+      "en": "Not finished yet!"
+    },
+    {
+      "zh": "这是教程教程教程教程这是教程教程教程教程这是教程教程教程教程这是教程教程教程教程这是教程教程教程教程这是教程教程教程教程这是教程教程教程教程",
+      "en": "This is the tutorial. This is the tutorial. This is the tutorial. This is the tutorial. This is the tutorial. This is the tutorial. This is the tutorial."
+    },
+    {
+      "zh": "测试测试测试测试测试四川省四川省四川省",
+      "en": "Test test test test test Sichuan Sichuan Sichuan"
+    },
+    {
+      "zh": "游戏机制：挨打 → 叠加 → 释放 → 回复\n",
+      "en": "Mechanics: Take Hits → Stack → Release → Heal\n"
+    },
+    {
+      "zh": "挨打：受伤时累积层数（能量）\r\n\r叠加：层数越高，每秒伤害越强（附带恒定小回复）\r\n\r释放：消耗层数释放范围伤害（层数越高伤害越明显）\r\n回复：释放时获得高额回复（基于层数）\n可以对着小火苗熟悉操作。",
+      "en": "Take Hits: Accumulate layers (energy) when you take damage.\r\n\rStack: Higher layers mean stronger damage per second (with a small constant heal).\r\n\rRelease: Spend layers to deal area damage (higher layers deal more damage).\r\nHeal: Get a large heal when releasing (based on layers).\nPractice the controls on the little flame."
+    },
+    {
+      "zh": "音乐/音效：",
+      "en": "Music / SFX:"
+    },
+    {
+      "zh": "Aio！",
+      "en": "Aio!"
+    },
+    {
+      "zh": "地鼠王",
+      "en": "Mole King"
+    },
+    {
+      "zh": "冲锋Boss",
+      "en": "Charging Boss"
+    },
+    {
+      "zh": "充能大师",
+      "en": "Charge Master"
+    },
+    {
+      "zh": "教程小怪",
+      "en": "Tutorial Minion"
+    },
+    {
+      "zh": "一团火",
+      "en": "A Flame"
+    },
+    {
+      "zh": "教程-叠加-释放",
+      "en": "Tutorial - Stack - Release"
+    }
+  ],
+  "dialogues": [
+    {
+      "scene": "Talk",
+      "en": [
+        "About dialogue.\nE - Continue dialogue\nQ - Previous line",
+        "Tab - View / close stats\n[grey]See your highest hit, damage taken, best heal, and total star marks[/grey]",
+        "Let me introduce myself!!",
+        "I'm an angel named Aio.",
+        "Every angel is born with a keepsake, and each keepsake grants a different ability.",
+        "My keepsake is a backpack. It can [red]absorb damage[/red] and store it.",
+        "The star marks in the top-left corner are the stored [red]layers[/red]. They aren't showing here because I'm not the one getting hit...",
+        "But I have to take hits to store them...",
+        "The downside is that the energy stored in my pocket is extremely unstable. It slowly [red]burns[/red] me [grey](based on layers)[/grey].",
+        "So you need to press [yellow]Space[/yellow] in time to release the energy. Try it—the released energy deals [red]damage[/red] to the surroundings.",
+        "Releasing energy also [green]restores health[/green][grey] (based on layers)[/grey].",
+        "Release damage and healing get different [yellow]bonuses[/yellow] based on layers, with tiers at [grey]0[/grey]/[yellow]6[/yellow]/[red]20[/red].",
+        "Try the controls: press WASD to move and absorb damage to [red]stack layers[/red].",
+        "If an enemy has a [red]range indicator[/red] around it, it's best not to get close—like the ring around this flame.",
+        "Enemies deal continuous [red]heavy damage[/red] in that area.",
+        "If you've learned the controls,\nI'll tell you what to do next!",
+        "Two monsters have appeared in the forest this week, and I've been sent to drive them out.",
+        "The bestiary seems to record their weaknesses. Let me take a look...",
+        "The Black Demon can only be damaged while it's [red]【Manifested】[/red], so you need to take hits and stack layers first.",
+        "The Red Demon summons [red]minions[/red]. When a minion charges at you, time your [yellow]release[/yellow] right and you can [red]【Reflect】[/red] it.",
+        "A [red]【Reflected】[/red] minion deals [orange]massive damage[/orange] to the Red Demon!!!!\n",
+        "Make sure you remember their [orange]weaknesses[/orange]!!",
+        "If you're ready, press E to begin.",
+        " "
+      ]
+    },
+    {
+      "scene": "TalkEnd",
+      "en": [
+        "Great! I can rest again this week, hehehe!",
+        "... ...",
+        "... ..."
+      ]
+    }
+  ],
+  "runtime": [
+    {
+      "key": "release_hint",
+      "zh": "按 {0} 键释放能量",
+      "en": "Press {0} to release energy"
+    }
+  ]
+}

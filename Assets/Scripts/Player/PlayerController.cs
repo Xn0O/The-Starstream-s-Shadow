@@ -3,74 +3,83 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("ÒÆ¶¯ÉèÖÃ")]
+    [Header("ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public float moveSpeed = 5f;
     public GameObject UpPic;
     public GameObject DownPic;
     public GameObject LeftPic;
     public GameObject RightPic;
 
-    [Header("·½Ïò¼ì²âÉèÖÃ")]
-    public float directionThreshold = 0.3f; // ·½Ïò¼ì²âãĞÖµ
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public float directionThreshold = 0.3f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 
-    [Header("·½ÏòÓÅÏÈ¼¶")]
-    public bool verticalPriority = true; // true:´¹Ö±ÓÅÏÈ, false:Ë®Æ½ÓÅÏÈ
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½")]
+    public bool verticalPriority = true; // true:ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½, false:Ë®Æ½ï¿½ï¿½ï¿½ï¿½
 
-    [Header("³õÊ¼·½Ïò")]
-    public Direction initialDirection = Direction.Down; // ³õÊ¼ÏÔÊ¾µÄ·½Ïò
+    [Header("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½")]
+    public Direction initialDirection = Direction.Down; // ï¿½ï¿½Ê¼ï¿½ï¿½Ê¾ï¿½Ä·ï¿½ï¿½ï¿½
 
-    [Header("ÉúÃüÖµ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½Öµ")]
     public float maxHealth = 100f;
     public float currentHealth;
-    public bool isDead = false; // ĞÂÔö£ºËÀÍö×´Ì¬±êÖ¾
+    public bool isDead = false; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ö¾
 
-    [Header("ÊÜÉËÕğ¶¯ÉèÖÃ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public float damageShakeDuration = 0.15f;
     public float damageShakeMagnitude = 0.1f;
 
-    [Header("´óÉËº¦Õğ¶¯ÉèÖÃ")]
+    [Header("ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public float heavyDamageShakeDuration = 0.25f;
     public float heavyDamageShakeMagnitude = 0.2f;
-    public float heavyDamageThreshold = 10f; // ´¥·¢´óÉËº¦Õğ¶¯µÄÉËº¦ãĞÖµ
+    public float heavyDamageThreshold = 10f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ğ¶¯µï¿½ï¿½Ëºï¿½ï¿½ï¿½Öµ
 
-    [Header("ÊÜ»÷ÌØĞ§")]
-    public GameObject hitEffectPrefab; // ÊÜ»÷ÌØĞ§Ô¤ÖÆÌå
-    public Vector3 hitEffectOffset = new Vector3(0, 0, 0); // ÌØĞ§Î»ÖÃÆ«ÒÆ
-    public Transform hitEffectSpawnPoint; // ÌØĞ§Éú³Éµã£¨¿ÉÑ¡£¬Èç¹û²»ÉèÖÃÔòÊ¹ÓÃÍæ¼ÒÎ»ÖÃ£©
+    [Header("ï¿½Ü»ï¿½ï¿½ï¿½Ğ§")]
+    public GameObject hitEffectPrefab; // ï¿½Ü»ï¿½ï¿½ï¿½Ğ§Ô¤ï¿½ï¿½ï¿½ï¿½
+    public Vector3 hitEffectOffset = new Vector3(0, 0, 0); // ï¿½ï¿½Ğ§Î»ï¿½ï¿½Æ«ï¿½ï¿½
+    public Transform hitEffectSpawnPoint; // ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½Éµã£¨ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½
 
-    [Header("ËÀÍöÉèÖÃ")]
-    public GameObject deathObjectPrefab; // ËÀÍöÊ±Ìæ»»µÄGameObject£¨¿ÉÑ¡£©
-    public GameObject deathUI; // ËÀÍö½çÃæUI£¨¿ÉÑ¡£¬Ö±½ÓÔÚ³¡¾°ÖĞÍÏÈë£©
-    public float deathDelay = 2f; // ËÀÍöºóÑÓ³ÙÖØĞÂ¼ÓÔØµÄÊ±¼ä
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public GameObject deathObjectPrefab; // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½æ»»ï¿½ï¿½GameObjectï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½
+    public GameObject deathUI; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Ú³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£©
+    public float deathDelay = 2f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Øµï¿½Ê±ï¿½ï¿½
+
+    [Header("ï¿½ï¿½ï¿½ï¿½ÏµÍ³")]
+    public float jumpForce = 10f;
+    public float groundCheckDistance = 0.2f;
+    public LayerMask groundLayer = 1;
+    public KeyCode jumpKey = KeyCode.Space;
+    public Transform groundCheckPoint; // ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Ê¹ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½
+    public GroundDetector groundDetector; // ï¿½ï¿½ï¿½ï¿½ï¿½ÓµÄ·Ö²ï¿½â²¿ï¿½ï¿½ï¿½ï¿½Ñ¡
+    [SerializeField] private bool isGrounded = false;
 
     private Rigidbody2D rb;
     private ScreenEffectManager screenEffectManager;
-    private GameObject currentHitEffect; // µ±Ç°ÕıÔÚ²¥·ÅµÄÊÜ»÷ÌØĞ§
+    private GameObject currentHitEffect; // ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Åµï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ğ§
 
-    // ¼ÇÂ¼×îºóÒ»´ÎÓĞĞ§µÄ·½Ïò
+    // ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½Ä·ï¿½ï¿½ï¿½
     public enum Direction { None, Up, Down, Left, Right }
-    private Direction lastValidDirection = Direction.Down; // Ä¬ÈÏÉèÎªÏòÏÂ
+    private Direction lastValidDirection = Direction.Down; // Ä¬ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
-        isDead = false; // È·±£¿ªÊ¼Ê±²»ÊÇËÀÍö×´Ì¬
+        isDead = false; // È·ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 
-        // ³õÊ¼»¯×îºóÓĞĞ§·½ÏòÎª³õÊ¼·½Ïò
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
         lastValidDirection = initialDirection;
 
-        // ³õÊ¼ÏÔÊ¾ÏòÏÂµÄÍ¼
+        // ï¿½ï¿½Ê¼ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Âµï¿½Í¼
         ShowDirectionPic(initialDirection);
 
-        // »ñÈ¡ÆÁÄ»Ğ§¹û¹ÜÀíÆ÷
+        // ï¿½ï¿½È¡ï¿½ï¿½Ä»Ğ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         screenEffectManager = FindObjectOfType<ScreenEffectManager>();
         if (screenEffectManager == null)
         {
-            Debug.LogWarning("Î´ÕÒµ½ScreenEffectManager£¬ÊÜÉËÕğ¶¯Ğ§¹û½«²»¿ÉÓÃ");
+            Debug.LogWarning("Î´ï¿½Òµï¿½ScreenEffectManagerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         }
 
-        // Òş²ØËÀÍöUI£¨Èç¹û´æÔÚ£©
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½
         if (deathUI != null)
         {
             deathUI.SetActive(false);
@@ -79,128 +88,150 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Èç¹ûÍæ¼ÒËÀÍö£¬½ûÖ¹ÒÆ¶¯ÊäÈë
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
         if (isDead)
         {
             rb.velocity = Vector2.zero;
             return;
         }
 
-        // ÒÆ¶¯ÊäÈë
+        // ç§»åŠ¨è¾“å…¥ï¼ˆæœ¬é¡¹ç›®æ˜¯ä¿¯è§†è§’å››æ–¹å‘ç§»åŠ¨ï¼ŒX/Y éƒ½è¦å†™å…¥é€Ÿåº¦ï¼‰
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
-        // ÒÆ¶¯
         Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
         rb.velocity = moveDirection * moveSpeed;
 
-        // ¸üĞÂÍ¼Æ¬ÏÔÊ¾
+        // å®æ—¶æ›´æ–°æ–¹å‘å›¾ç‰‡
         UpdateDirectionPics(moveDirection);
     }
 
-    // ±»µĞÈË¹¥»÷Ê±µ÷ÓÃ
+    void CheckGrounded()
+    {
+        // ï¿½ï¿½ï¿½È¼ï¿½ï¿½GroundDetector
+        if (groundDetector != null)
+        {
+            isGrounded = groundDetector.CheckGrounded();
+            return;
+        }
+
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½
+        Vector2 origin = groundCheckPoint ? groundCheckPoint.position : transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, groundCheckDistance, groundLayer);
+        isGrounded = hit.collider != null;
+    }
+
+    void HandleJump()
+    {
+        if (Input.GetKeyDown(jumpKey) && isGrounded)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
+    }
+
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
     public void TakeDamage(float damage)
     {
-        // Èç¹ûÒÑ¾­ËÀÍö£¬²»ÔÙÊÜµ½ÉËº¦
+        // ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½Ëºï¿½
         if (isDead) return;
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
-        Debug.Log($"Íæ¼ÒÊÜµ½ÉËº¦: {damage}, µ±Ç°ÉúÃü: {currentHealth}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½Ëºï¿½: {damage}, ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½: {currentHealth}");
 
-        // µ÷ÓÃUIÏÔÊ¾ÉËº¦Êı×Ö²¢Í³¼ÆÍæ¼ÒÊÜÉËº¦
+        // ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½Ê¾ï¿½Ëºï¿½ï¿½ï¿½ï¿½Ö²ï¿½Í³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½
         UIManager ui = FindObjectOfType<UIManager>();
         if (ui)
         {
             ui.ShowPlayerTakenDamageText(transform.position, damage, Color.red);
         }
 
-        // Ìí¼ÓÊÜÉËÕğ¶¯·´À¡
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ¶¯·ï¿½ï¿½ï¿½
         ApplyDamageShake(damage);
 
-        // Èç¹ûÉËº¦Öµ´ïµ½´óÉËº¦ãĞÖµ£¬²¥·ÅÊÜ»÷ÌØĞ§
+        // ï¿½ï¿½ï¿½ï¿½Ëºï¿½Öµï¿½ïµ½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ğ§
         if (damage >= heavyDamageThreshold)
         {
             PlayHitEffect();
         }
 
-        // ¼ì²éÉúÃüÖµÊÇ·ñĞ¡ÓÚµÈÓÚ0
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ç·ï¿½Ğ¡ï¿½Úµï¿½ï¿½ï¿½0
         if (currentHealth <= 0 && !isDead)
         {
             Die();
         }
     }
 
-    // Íæ¼ÒËÀÍö´¦Àí
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private void Die()
     {
         isDead = true;
-        Debug.Log("Íæ¼ÒËÀÍö£¡");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
-        // Í£Ö¹ÒÆ¶¯
+        // Í£Ö¹ï¿½Æ¶ï¿½
         rb.velocity = Vector2.zero;
 
-        // ¸ü»»ËÀÍöGameObject£¨Èç¹ûÉèÖÃÁË£©
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½GameObjectï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½
         if (deathObjectPrefab != null)
         {
             GameObject deathObj = Instantiate(deathObjectPrefab, transform.position, Quaternion.identity);
             deathObj.name = "PlayerDeathObject";
         }
 
-        // Òş²ØÍæ¼ÒÌùÍ¼
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
         HideAllDirectionPics();
 
-        // ½ûÓÃÍæ¼Ò¿ØÖÆ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½ï¿½ï¿½
         DisablePlayerControl();
 
-        // ÏÔÊ¾ËÀÍö½çÃæ£¨Èç¹ûÉèÖÃÁË£©
+        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ£¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë£ï¿½
         if (deathUI != null)
         {
             deathUI.SetActive(true);
         }
 
-        // ÑÓ³ÙÖØĞÂ¼ÓÔØ³¡¾°
+        // ï¿½Ó³ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ø³ï¿½ï¿½ï¿½
         Invoke("ReloadCurrentScene", deathDelay);
     }
 
-    // ½ûÓÃÍæ¼Ò¿ØÖÆ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½ï¿½ï¿½
     private void DisablePlayerControl()
     {
-        // ½ûÓÃRigidbody2D
+        // ï¿½ï¿½ï¿½ï¿½Rigidbody2D
         if (rb != null)
         {
             rb.velocity = Vector2.zero;
-            rb.simulated = false; // Í£Ö¹ÎïÀíÄ£Äâ
+            rb.simulated = false; // Í£Ö¹ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
         }
 
-        // ½ûÓÃËùÓĞÅö×²Æ÷
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×²ï¿½ï¿½
         var colliders = GetComponents<Collider2D>();
         foreach (var collider in colliders)
         {
             collider.enabled = false;
         }
 
-        Debug.Log("Íæ¼Ò¿ØÖÆÒÑ½ûÓÃ");
+        Debug.Log("ï¿½ï¿½Ò¿ï¿½ï¿½ï¿½ï¿½Ñ½ï¿½ï¿½ï¿½");
     }
 
-    // ÖØĞÂ¼ÓÔØµ±Ç°³¡¾°
+    // ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Øµï¿½Ç°ï¿½ï¿½ï¿½ï¿½
     private void ReloadCurrentScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // ÖÎÁÆ
+    // ï¿½ï¿½ï¿½ï¿½
     public void Heal(float amount)
     {
-        // Èç¹ûÒÑ¾­ËÀÍö£¬²»ÄÜÖÎÁÆ
+        // ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (isDead) return;
 
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
 
-        Debug.Log($"Íæ¼ÒÖÎÁÆ: {amount}, µ±Ç°ÉúÃü: {currentHealth}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {amount}, ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½: {currentHealth}");
 
-        // µ÷ÓÃUIÏÔÊ¾ÖÎÁÆÊı×Ö
+        // ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         UIManager ui = FindObjectOfType<UIManager>();
         if (ui)
         {
@@ -208,24 +239,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ¸üĞÂ·½ÏòÍ¼Æ¬ÏÔÊ¾
+    // ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ê¾
     void UpdateDirectionPics(Vector2 moveDirection)
     {
-        // Èç¹ûËÀÍö£¬²»¸üĞÂ·½Ïò
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½
         if (isDead) return;
 
-        // ¼ì²âÒÆ¶¯·½Ïò
+        // ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
         bool isMovingUp = moveDirection.y > directionThreshold;
         bool isMovingDown = moveDirection.y < -directionThreshold;
         bool isMovingLeft = moveDirection.x < -directionThreshold;
         bool isMovingRight = moveDirection.x > directionThreshold;
 
-        // Èç¹ûÓĞÒÆ¶¯ÊäÈë
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
         if (moveDirection.magnitude > directionThreshold)
         {
             if (verticalPriority)
             {
-                // ´¹Ö±ÓÅÏÈ
+                // ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½
                 if (isMovingUp)
                 {
                     ShowDirectionPic(Direction.Up);
@@ -245,7 +276,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                // Ë®Æ½ÓÅÏÈ
+                // Ë®Æ½ï¿½ï¿½ï¿½ï¿½
                 if (isMovingLeft)
                 {
                     ShowDirectionPic(Direction.Left);
@@ -266,21 +297,21 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // Ã»ÓĞÒÆ¶¯ÊäÈë£¬±£³Ö×îºóÒ»´ÎÓĞĞ§µÄ·½Ïò
+            // Ã»ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½Ä·ï¿½ï¿½ï¿½
             KeepLastDirection();
         }
     }
 
-    // ÏÔÊ¾Ö¸¶¨·½ÏòµÄÌùÍ¼
+    // ï¿½ï¿½Ê¾Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
     void ShowDirectionPic(Direction direction)
     {
-        // Èç¹ûËÀÍö£¬²»ÏÔÊ¾·½ÏòÌùÍ¼
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
         if (isDead) return;
 
-        // Òş²ØËùÓĞÌùÍ¼
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
         HideAllDirectionPics();
 
-        // ÏÔÊ¾Ö¸¶¨·½ÏòµÄÌùÍ¼
+        // ï¿½ï¿½Ê¾Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
         switch (direction)
         {
             case Direction.Up:
@@ -297,11 +328,11 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        // ¼ÇÂ¼µ±Ç°·½Ïò
+        // ï¿½ï¿½Â¼ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
         lastValidDirection = direction;
     }
 
-    // ±£³Ö×îºóÒ»´ÎµÄ·½Ïò
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ÎµÄ·ï¿½ï¿½ï¿½
     void KeepLastDirection()
     {
         if (isDead) return;
@@ -312,12 +343,12 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // Èç¹û´ÓÀ´Ã»ÓĞ¹ıÓĞĞ§·½Ïò£¬ÏÔÊ¾³õÊ¼·½Ïò
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ğ¹ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
             ShowDirectionPic(initialDirection);
         }
     }
 
-    // Òş²ØËùÓĞ·½ÏòÌùÍ¼
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ·ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
     void HideAllDirectionPics()
     {
         if (UpPic != null) UpPic.SetActive(false);
@@ -326,7 +357,7 @@ public class PlayerController : MonoBehaviour
         if (RightPic != null) RightPic.SetActive(false);
     }
 
-    // Ç¿ÖÆÏÔÊ¾Ö¸¶¨·½Ïò£¨¿ÉÒÔ´ÓÍâ²¿µ÷ÓÃ£©
+    // Ç¿ï¿½ï¿½ï¿½ï¿½Ê¾Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ò£¨¿ï¿½ï¿½Ô´ï¿½ï¿½â²¿ï¿½ï¿½ï¿½Ã£ï¿½
     public void SetDirection(Direction direction)
     {
         if (isDead) return;
@@ -335,94 +366,115 @@ public class PlayerController : MonoBehaviour
         ShowDirectionPic(direction);
     }
 
-    // ²¥·ÅÊÜ»÷ÌØĞ§£¨¼ò»¯°æ£©
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ò»¯°æ£©
     private void PlayHitEffect()
     {
-        // Èç¹ûÒÑ¾­ÓĞÒ»¸öÊÜ»÷ÌØĞ§ÔÚ²¥·Å£¬ÏÈÏú»ÙËü
+        // ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ğ§ï¿½Ú²ï¿½ï¿½Å£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (currentHitEffect != null)
         {
             Destroy(currentHitEffect);
         }
 
-        // ¼ì²éÊÇ·ñÓĞÊÜ»÷ÌØĞ§Ô¤ÖÆÌå
+        // ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ğ§Ô¤ï¿½ï¿½ï¿½ï¿½
         if (hitEffectPrefab == null)
         {
-            Debug.LogWarning("ÊÜ»÷ÌØĞ§Ô¤ÖÆÌåÎ´·ÖÅä£¬ÇëÔÚInspectorÖĞ·ÖÅäHit Effect Prefab");
+            Debug.LogWarning("ï¿½Ü»ï¿½ï¿½ï¿½Ğ§Ô¤ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ä£¬ï¿½ï¿½ï¿½ï¿½Inspectorï¿½Ğ·ï¿½ï¿½ï¿½Hit Effect Prefab");
             return;
         }
 
-        // È·¶¨ÌØĞ§Éú³ÉÎ»ÖÃ
+        // È·ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
         Vector3 spawnPosition;
         if (hitEffectSpawnPoint != null)
         {
-            // Ê¹ÓÃÖ¸¶¨µÄÉú³Éµã
+            // Ê¹ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½
             spawnPosition = hitEffectSpawnPoint.position + hitEffectOffset;
         }
         else
         {
-            // Ê¹ÓÃÍæ¼ÒÎ»ÖÃ¼ÓÉÏÆ«ÒÆ
+            // Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã¼ï¿½ï¿½ï¿½Æ«ï¿½ï¿½
             spawnPosition = transform.position + hitEffectOffset;
         }
 
-        // ÊµÀı»¯ÊÜ»÷ÌØĞ§£¨ÌØĞ§»á×Ô¶¯Ïú»Ù£©
+        // Êµï¿½ï¿½ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ù£ï¿½
         currentHitEffect = Instantiate(hitEffectPrefab, spawnPosition, Quaternion.identity);
 
-        Debug.Log("²¥·ÅÊÜ»÷ÌØĞ§");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ğ§");
     }
 
-    // Ó¦ÓÃÊÜÉËÕğ¶¯Ğ§¹û
+    // Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½
     private void ApplyDamageShake(float damage)
     {
         if (screenEffectManager == null) return;
 
-        // ¼ì²éÊÇ·ñÎª´óÉËº¦
+        // ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½Ëºï¿½
         if (damage >= heavyDamageThreshold)
         {
-            // Ê¹ÓÃ´óÉËº¦Õğ¶¯Ğ§¹û
+            // Ê¹ï¿½Ã´ï¿½ï¿½Ëºï¿½ï¿½ï¿½Ğ§ï¿½ï¿½
             ApplyHeavyDamageShake(damage);
         }
         else
         {
-            // Ê¹ÓÃÆÕÍ¨ÉËº¦Õğ¶¯Ğ§¹û
+            // Ê¹ï¿½ï¿½ï¿½ï¿½Í¨ï¿½Ëºï¿½ï¿½ï¿½Ğ§ï¿½ï¿½
             ApplyNormalDamageShake(damage);
         }
     }
 
-    // Ó¦ÓÃÆÕÍ¨ÉËº¦Õğ¶¯Ğ§¹û
+    // Ó¦ï¿½ï¿½ï¿½ï¿½Í¨ï¿½Ëºï¿½ï¿½ï¿½Ğ§ï¿½ï¿½
     private void ApplyNormalDamageShake(float damage)
     {
-        // ¸ù¾İÉËº¦Öµµ÷ÕûÕğ¶¯Ç¿¶È
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½
         float intensityMultiplier = Mathf.Clamp(damage / 30f, 0.3f, 1.5f);
         float actualShakeMagnitude = damageShakeMagnitude * intensityMultiplier;
         float actualShakeDuration = damageShakeDuration * Mathf.Clamp(intensityMultiplier, 0.8f, 1.5f);
 
-        // Ó¦ÓÃÆÁÄ»Õğ¶¯
+        // Ó¦ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½
         screenEffectManager.ShakeCamera(actualShakeDuration, actualShakeMagnitude);
     }
 
-    // Ó¦ÓÃ´óÉËº¦Õğ¶¯Ğ§¹û
+    // Ó¦ï¿½Ã´ï¿½ï¿½Ëºï¿½ï¿½ï¿½Ğ§ï¿½ï¿½
     private void ApplyHeavyDamageShake(float damage)
     {
-        // ¸ù¾İÉËº¦Öµµ÷Õû´óÉËº¦Õğ¶¯Ç¿¶È
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½Ç¿ï¿½ï¿½
         float intensityMultiplier = Mathf.Clamp(damage / 50f, 0.8f, 2.5f);
         float actualShakeMagnitude = heavyDamageShakeMagnitude * intensityMultiplier;
         float actualShakeDuration = heavyDamageShakeDuration * Mathf.Clamp(intensityMultiplier, 1f, 2f);
 
-        // Ó¦ÓÃ¸üÇ¿µÄÆÁÄ»Õğ¶¯
+        // Ó¦ï¿½Ã¸ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½
         screenEffectManager.ShakeCamera(actualShakeDuration, actualShakeMagnitude);
 
-        // Ìí¼ÓºìÉ«ÉÁ¹âĞ§¹û
-        Color flashColor = new Color(1f, 0.2f, 0.2f, 0.5f); // ºìÉ«ÉÁ¹â£¬¸ü¸ßµÄÍ¸Ã÷¶È
-        float flashDuration = 0.2f + (damage * 0.005f); // ¸ù¾İÉËº¦µ÷ÕûÉÁ¹â³ÖĞøÊ±¼ä
+        // ï¿½ï¿½ï¿½Óºï¿½É«ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½
+        Color flashColor = new Color(1f, 0.2f, 0.2f, 0.5f); // ï¿½ï¿½É«ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½ßµï¿½Í¸ï¿½ï¿½ï¿½ï¿½
+        float flashDuration = 0.2f + (damage * 0.005f); // ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
         screenEffectManager.FlashScreen(flashColor, flashDuration);
 
-        Debug.Log($"´óÉËº¦Õğ¶¯: ÉËº¦={damage}, Õğ¶¯Ç¿¶È={actualShakeMagnitude}, ³ÖĞøÊ±¼ä={actualShakeDuration}");
+        Debug.Log($"ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½: ï¿½Ëºï¿½={damage}, ï¿½ï¿½Ç¿ï¿½ï¿½={actualShakeMagnitude}, ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½={actualShakeDuration}");
     }
 
-    // µ÷ÊÔ·½·¨
-    [ContextMenu("²âÊÔËÀÍö")]
+    // ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ß¿ï¿½ï¿½Ó»ï¿½ - Sceneï¿½ï¿½Í¼ï¿½Ğ¿É¼ï¿½
+    void OnDrawGizmos()
+    {
+        if (isDead) return;
+
+        Vector2 origin = groundCheckPoint ? groundCheckPoint.position : transform.position;
+        Vector2 end = origin + Vector2.down * groundCheckDistance;
+
+        // ï¿½Ç·ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½=ï¿½Ì£ï¿½ï¿½ï¿½=ï¿½ï¿½
+        Gizmos.color = isGrounded ? Color.green : Color.red;
+
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        Gizmos.DrawLine(origin, end);
+
+        // ï¿½ï¿½ï¿½Ëµã»­Ò»ï¿½ï¿½Ğ¡Ô²È¦
+        Gizmos.DrawWireSphere(end, 0.05f);
+
+        // ï¿½ï¿½ï¿½Ô­ï¿½ã»­Ò»ï¿½ï¿½Ğ¡ï¿½ã£¨ï¿½ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½Ó¾ï¿½ï¿½ï¿½
+        Gizmos.DrawWireSphere(origin, 0.03f);
+    }
+
+    // ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½
+    [ContextMenu("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public void TestDeath()
     {
-        TakeDamage(currentHealth + 1); // ÊÜµ½³¬¹ıµ±Ç°ÉúÃüµÄÉËº¦
+        TakeDamage(currentHealth + 1); // ï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½
     }
 }

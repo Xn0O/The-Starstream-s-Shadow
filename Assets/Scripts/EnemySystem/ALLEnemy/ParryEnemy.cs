@@ -41,7 +41,6 @@ public class ParryEnemy : BaseEnemy
     [Header("蓄力特效设置")]
     [SerializeField] private GameObject windupEffectPrefab; // 蓄力特效
     [SerializeField] private bool showWindupEffect = true; // 是否显示蓄力特效
-    [SerializeField] private float windupFlashSpeed = 3f; // 蓄力闪烁速度
 
     // 简化状态
     private enum SimpleState { Patrol, Windup, Charging, Parry, Rebound, Cooldown, Timeout }

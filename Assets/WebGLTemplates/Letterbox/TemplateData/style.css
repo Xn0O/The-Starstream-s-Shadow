@@ -1,0 +1,45 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+/* 固定 16:9（1920x1080）显示区域，多余空间由黑色背景填满 */
+#unity-container {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(100vw, 177.7778vh);
+  height: min(100vh, 56.25vw);
+  background: #000;
+  overflow: hidden;
+}
+
+#unity-canvas {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: {{{ BACKGROUND_COLOR }}};
+}
+
+.unity-mobile #unity-canvas { width: 100%; height: 100% }
+#unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none }
+#unity-logo { width: 154px; height: 130px; background: url('unity-logo-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
+#unity-progress-bar-empty { width: 141px; height: 18px; margin-top: 10px; margin-left: 6.5px; background: url('progress-bar-empty-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
+#unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('progress-bar-full-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
+
+/* 只保留全屏按钮，浮在画面右下角，不占用 16:9 游戏区域 */
+#unity-footer { position: absolute; left: 0; right: 0; bottom: 0; height: 0; z-index: 5 }
+#unity-webgl-logo { display: none }
+#unity-build-title { display: none }
+#unity-fullscreen-button { position: absolute; right: 8px; bottom: 8px; width: 38px; height: 38px; cursor: pointer; opacity: 0.45; background: url('fullscreen-button.png') no-repeat center; transition: opacity 0.15s ease }
+#unity-fullscreen-button:hover { opacity: 1 }
+
+#unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none; z-index: 10 }
